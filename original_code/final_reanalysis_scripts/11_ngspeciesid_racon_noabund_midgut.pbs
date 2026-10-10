@@ -1,0 +1,159 @@
+#!/bin/bash
+
+#PBS -N braden_noabund
+#PBS -q serial
+#PBS -l select=1:ncpus=1:mem=2gb
+#PBS -j oe
+
+set -euo pipefail
+
+PROJECT="/hpctmp/e0958567/Braden_16S_20260819"
+RUN="$PROJECT/20_FINAL_reanalysis_20260903"
+
+MANIFEST="$RUN/manifests/all_576_midgut_samples.txt"
+COUNTS="$RUN/01_demux_length_qc/sample_read_counts.tsv"
+INPUT_DIR="$RUN/inputs/03b_length_filtered_fastq"
+
+OUTBASE="$RUN/03_ngspeciesid_racon/noabund"
+SAMPLE_OUT="$OUTBASE/samples"
+SUMMARY="$OUTBASE/sample_summary.tsv"
+FAILURES="$OUTBASE/failures.tsv"
+
+mkdir -p "$SAMPLE_OUT"
+
+module purge
+unset PYTHONPATH
+module load miniconda/4.12
+source "$(conda info --base)/etc/profile.d/conda.sh"
+conda activate /hpctmp/e0958567/conda_envs/ngspeciesid-0.3.1
+
+export LC_ALL=C
+export LANG=C
+export PATH="$HOME/bin:$PATH"
+
+echo "============================================================"
+echo "NGSpeciesID + RACON — NO ABUNDANCE-RATIO FILTER"
+echo "============================================================"
+echo "Started: $(date -Is)"
+echo "Midgut wells: $(wc -l < "$MANIFEST")"
+echo "abundance_ratio: 0"
+echo
+echo "NOTE: NGSpeciesID's technical singleton handling remains active."
+echo
+
+printf \
+"sample_id\tdemultiplexed_reads\treads_350_550\ttest\tabundance_ratio\tfinal_racon_consensuses\trepresented_supporting_reads\tstatus\n" \
+> "$SUMMARY"
+
+printf "sample_id\ttest\treason\n" > "$FAILURES"
+
+while IFS= read -r SAMPLE
+do
+    [[ -n "$SAMPLE" ]] || continue
+
+    INPUT="$INPUT_DIR/${SAMPLE}_filtered.fastq"
+    OUT="$SAMPLE_OUT/$SAMPLE"
+
+    ROW=$(awk -F'\t' -v s="$SAMPLE" \
+        'NR>1 && $1==s {print $2"\t"$3; exit}' "$COUNTS")
+
+    DEMUX_N=$(printf "%s\n" "$ROW" | cut -f1)
+    N=$(printf "%s\n" "$ROW" | cut -f2)
+
+    if [[ ! -s "$INPUT" ]]; then
+        printf "%s\tnoabund\tmissing_input\n" "$SAMPLE" >> "$FAILURES"
+        continue
+    fi
+
+    echo "------------------------------------------------------------"
+    echo "Sample: $SAMPLE"
+    echo "Demultiplexed reads: $DEMUX_N"
+    echo "350-550 bp reads: $N"
+
+    rm -rf "$OUT"
+    mkdir -p "$OUT"
+
+    set +e
+
+    NGSpeciesID \
+        --ont \
+        --fastq "$INPUT" \
+        --outfolder "$OUT" \
+        --consensus \
+        --abundance_ratio 0 \
+        --racon \
+        --racon_iter 3 \
+        --t 1
+
+    EXIT_STATUS=$?
+
+    set -e
+
+    # Count actual final Racon products present on disk,
+    # even if a later cluster caused NGSpeciesID to exit non-zero.
+    CONSENSUS_N=0
+    SUPPORT=0
+
+    while IFS= read -r RACON
+    do
+        [[ -s "$RACON" ]] || continue
+
+        CONSENSUS_N=$((CONSENSUS_N + 1))
+
+        CLUSTER_DIR=$(basename "$(dirname "$RACON")")
+        CID="${CLUSTER_DIR#racon_cl_id_}"
+        READS="$OUT/reads_to_consensus_${CID}.fastq"
+
+        if [[ -s "$READS" ]]; then
+            X=$(awk 'END {print NR/4}' "$READS")
+            SUPPORT=$((SUPPORT + X))
+        fi
+
+    done < <(
+        find "$OUT" \
+            -mindepth 2 \
+            -maxdepth 2 \
+            -type f \
+            -path '*/racon_cl_id_*/racon_polished_it_2.fasta' \
+            -size +0c \
+            | sort
+    )
+
+    if [[ "$EXIT_STATUS" -eq 0 ]]; then
+        STATUS="SUCCESS"
+    else
+        STATUS="FAILED_NGSPECIESID"
+        printf "%s\tnoabund\tNGSpeciesID_exit_%s\n" \
+            "$SAMPLE" "$EXIT_STATUS" >> "$FAILURES"
+    fi
+
+    printf \
+    "%s\t%s\t%s\tnoabund\t0\t%s\t%s\t%s\n" \
+    "$SAMPLE" "$DEMUX_N" "$N" \
+    "$CONSENSUS_N" "$SUPPORT" "$STATUS" \
+    >> "$SUMMARY"
+
+done < "$MANIFEST"
+
+echo
+echo "============================================================"
+echo "NO-ABUNDANCE FINAL SUMMARY"
+echo "============================================================"
+
+echo -n "Midgut wells: "
+awk 'END {print NR-1}' "$SUMMARY"
+
+echo -n "SUCCESS: "
+awk -F'\t' 'NR>1 && $8=="SUCCESS" {n++} END {print n+0}' "$SUMMARY"
+
+echo -n "FAILED: "
+awk -F'\t' 'NR>1 && $8!="SUCCESS" {n++} END {print n+0}' "$SUMMARY"
+
+echo -n "Final Racon consensuses present: "
+awk -F'\t' 'NR>1 {s+=$6} END {print s+0}' "$SUMMARY"
+
+echo -n "Represented supporting reads: "
+awk -F'\t' 'NR>1 {s+=$7} END {print s+0}' "$SUMMARY"
+
+echo
+echo "Completed: $(date -Is)"

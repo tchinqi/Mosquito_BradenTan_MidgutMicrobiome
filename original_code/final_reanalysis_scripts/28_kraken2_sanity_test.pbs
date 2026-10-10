@@ -1,0 +1,31 @@
+#!/bin/bash
+#PBS -N Kraken2_test
+#PBS -q serial
+#PBS -l select=1:ncpus=1:mem=12gb
+#PBS -j oe
+
+module purge
+module load miniconda/4.12
+source "$(conda info --base)/etc/profile.d/conda.sh"
+conda activate "/hpctmp/e0958567/conda_envs/kraken2"
+
+export LC_ALL=C
+export LANG=C
+
+echo "===== KRAKEN2 SANITY TEST ====="
+date
+kraken2 --version
+
+kraken2   --db "/hpctmp/e0958567/kraken2_db/k2_standard_08gb_20230605"   --threads 1   --report "/hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/06_taxonomy/kraken2_sanity_test/MC_first5.report.tsv"   --output "/hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/06_taxonomy/kraken2_sanity_test/MC_first5.kraken.tsv"   "/hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/06_taxonomy/kraken2_sanity_test/MC_first5.fasta"
+
+echo
+echo "===== OUTPUT ====="
+cat "/hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/06_taxonomy/kraken2_sanity_test/MC_first5.kraken.tsv"
+
+echo
+echo "===== REPORT ====="
+cat "/hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/06_taxonomy/kraken2_sanity_test/MC_first5.report.tsv"
+
+echo
+echo "Finished:"
+date

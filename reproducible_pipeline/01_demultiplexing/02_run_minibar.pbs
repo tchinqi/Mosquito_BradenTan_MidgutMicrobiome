@@ -1,0 +1,123 @@
+#!/bin/bash
+# =============================================================================
+# Script 02 - 02_run_minibar.pbs
+# LSM4288 FYP: mosquito midgut 16S rRNA (Nanopore, V3-V4)
+# Author  : Braden Tan (Tan Chin Qi Braden), NUS; Puniamoorthy lab
+# Step    : Demultiplexing
+# Purpose : Demultiplexes the merged Nanopore FASTQ into per-well FASTQ files
+#           with Minibar (tag edit distance 2; tags and primers trimmed).
+# Input   : Merged_fastq_passed.fastq; Demux_sheet_minibar.txt
+# Output  : 02_demultiplexed/sample_*.fastq
+# Run on  : Atlas9 PBS job
+# Release : Header added for the code release (10 Oct 2026); comments only,
+#           code unchanged. Unedited original: original_code/.
+# =============================================================================
+
+#PBS -q serial
+#PBS -l select=1:ncpus=1:mem=4gb
+#PBS -j oe
+#PBS -N Braden_demux
+
+cd "$PBS_O_WORKDIR"
+
+set -euo pipefail
+
+PY="/home/svu/e0958567/.conda/miniconda/4.9/envs/braden_fyp/bin/python"
+
+MINIBAR="/hpctmp/e0958567/Braden_16S_20260819/scripts/minibar.py"
+
+DEMUX="/hpctmp/e0958567/Braden_16S_20260819/01_demux_metadata/Demux_sheet_minibar.txt"
+
+FASTQ="/hpctmp/e0958567/Braden_16S_20260819/00_source/Merged_fastq_passed.fastq"
+
+OUTDIR="/hpctmp/e0958567/Braden_16S_20260819/02_demultiplexed"
+
+echo "========================================"
+echo "STEP 2: MINIBAR DEMULTIPLEXING"
+echo "========================================"
+date
+
+echo
+echo "Checking inputs..."
+
+if [ ! -f "$MINIBAR" ]; then
+    echo "ERROR: Cannot find Minibar:"
+    echo "$MINIBAR"
+    exit 1
+fi
+
+if [ ! -f "$DEMUX" ]; then
+    echo "ERROR: Cannot find demultiplexing sheet:"
+    echo "$DEMUX"
+    exit 1
+fi
+
+if [ ! -f "$FASTQ" ]; then
+    echo "ERROR: Cannot find merged FASTQ:"
+    echo "$FASTQ"
+    exit 1
+fi
+
+mkdir -p "$OUTDIR"
+
+# Safety: do not overwrite an existing demultiplexing run
+if [ -n "$(ls -A "$OUTDIR" 2>/dev/null)" ]; then
+    echo "ERROR: Output directory is not empty:"
+    echo "$OUTDIR"
+    echo "Stopping to avoid overwriting existing results."
+    exit 1
+fi
+
+echo
+echo "Input FASTQ:"
+ls -lh "$FASTQ"
+
+echo
+echo "Demultiplexing sheet:"
+wc -l "$DEMUX"
+
+echo
+echo "Minibar version:"
+"$PY" "$MINIBAR" -v
+
+echo
+echo "Running Minibar..."
+echo "Settings: -C -F -fh -T -e 2"
+echo
+
+"$PY" "$MINIBAR" \
+    -C \
+    -F \
+    -fh \
+    -T \
+    -e 2 \
+    -P "$OUTDIR/sample_" \
+    "$DEMUX" \
+    "$FASTQ"
+
+echo
+echo "========================================"
+echo "OUTPUT QC"
+echo "========================================"
+
+echo
+echo "Number of FASTQ files:"
+find "$OUTDIR" -maxdepth 1 -type f -name "*.fastq" | wc -l
+
+echo
+echo "Total output directory size:"
+du -sh "$OUTDIR"
+
+echo
+echo "Multiple matches file:"
+ls -lh "$OUTDIR/sample_Multiple_Matches.fastq" 2>/dev/null || true
+
+echo
+echo "Unknown reads file:"
+ls -lh "$OUTDIR/sample_unk.fastq" 2>/dev/null || true
+
+echo
+echo "========================================"
+echo "MINIBAR COMPLETE"
+echo "========================================"
+date

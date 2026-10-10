@@ -1,0 +1,105 @@
+#!/bin/bash
+#PBS -N Kraken_GG80_rescue
+#PBS -q serial
+#PBS -l select=1:ncpus=1:mem=10gb
+#PBS -l walltime=01:00:00
+#PBS -j oe
+
+set -euo pipefail
+
+RUN="/hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903"
+DB="/hpctmp/e0958567/kraken2_db/k2_standard_08gb_20230605"
+KRAKEN="/hpctmp/e0958567/conda_envs/kraken2/bin/kraken2"
+
+IN="$RUN/06_taxonomy/kraken2_final/GG2_default80_unassigned"
+OUT="$RUN/06_taxonomy/kraken2_final/GG2_default80_unassigned"
+
+mkdir -p "$OUT"
+
+echo "============================================================"
+echo "GG2 default/80%-UNASSIGNED OTUs -> Kraken2 rescue"
+echo "Kraken confidence: DEFAULT (0.0)"
+echo "============================================================"
+echo
+"$KRAKEN" --version
+echo
+
+
+run_rescue () {
+
+    DATASET="$1"
+    FASTA="$2"
+    EXPECTED="$3"
+
+    echo
+    echo "============================================================"
+    echo "$DATASET rescue"
+    echo "Expected input OTUs: $EXPECTED"
+    echo "============================================================"
+
+    # IMPORTANT:
+    # No --confidence option is supplied.
+    # Therefore Kraken2 uses its default confidence = 0.0.
+    "$KRAKEN" \
+        --db "$DB" \
+        --threads 1 \
+        --use-names \
+        --report "$OUT/${DATASET}_GG2_default80_unassigned.kraken.report" \
+        --output "$OUT/${DATASET}_GG2_default80_unassigned.kraken.tsv" \
+        "$FASTA"
+
+    RESULT="$OUT/${DATASET}_GG2_default80_unassigned.kraken.tsv"
+
+    TOTAL=$(awk 'END{print NR}' "$RESULT")
+
+    CLASSIFIED=$(awk -F'\t' \
+        '$1=="C"{n++} END{print n+0}' \
+        "$RESULT")
+
+    UNCLASSIFIED=$(awk -F'\t' \
+        '$1=="U"{n++} END{print n+0}' \
+        "$RESULT")
+
+    echo
+    echo "$DATASET VALIDATION"
+    echo "Input OTUs:          $TOTAL"
+    echo "Kraken classified:   $CLASSIFIED"
+    echo "Kraken unclassified: $UNCLASSIFIED"
+    echo "Accounting:           $((CLASSIFIED + UNCLASSIFIED)) / $TOTAL"
+
+    if [ "$TOTAL" -ne "$EXPECTED" ]; then
+        echo "ERROR: expected $EXPECTED OTUs but found $TOTAL"
+        exit 1
+    fi
+
+    if [ $((CLASSIFIED + UNCLASSIFIED)) -ne "$TOTAL" ]; then
+        echo "ERROR: Kraken accounting failed"
+        exit 1
+    fi
+
+    echo "Accounting PASS"
+}
+
+
+# LC: GG2 default/80%-identity Unassigned OTUs
+run_rescue \
+    "LC" \
+    "$IN/LC_GG2_default80_unassigned.fasta" \
+    4870
+
+
+# MC: GG2 default/80%-identity Unassigned OTUs
+run_rescue \
+    "MC" \
+    "$IN/MC_GG2_default80_unassigned.fasta" \
+    186
+
+
+echo
+echo "============================================================"
+echo "GG2 DEFAULT/80%-UNASSIGNED KRAKEN RESCUE COMPLETE"
+echo "============================================================"
+echo
+echo "Output directory:"
+echo "$OUT"
+

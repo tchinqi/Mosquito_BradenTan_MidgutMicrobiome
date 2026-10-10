@@ -1,0 +1,270 @@
+#!/usr/bin/env python3
+
+"""
+RECONSTRUCTED SCRIPT
+
+Purpose
+-------
+Rebuild the final 576-sample Racon-polished pooled FASTA and provenance
+table from the preserved sample-level NGSpeciesID/Racon outputs.
+
+This is NOT the original historical pooling code.
+
+The original interactive pooling code was not recovered. This script
+was reconstructed on 2026-10-06 from:
+
+- the final 576-sample manifest
+- min2_baseline sample outputs
+- min2_rescue sample outputs
+- the historical final pooled FASTA
+- the historical final provenance table
+- exhaustive validation of all 22,528 final records
+
+Recovered historical ordering logic
+------------------------------------
+1. Iterate samples in all_576_midgut_samples.txt order.
+2. Use min2_rescue for the 8 rescue samples; otherwise min2_baseline.
+3. Retain clusters with racon_cl_id_<cluster>/consensus.fasta.
+4. Sort cluster IDs lexicographically as strings.
+5. supporting_reads = FASTQ record count in
+   reads_to_consensus_<cluster>.fastq.
+6. Assign RACON_000001 ... RACON_022528 sequentially.
+7. Write one unwrapped sequence line per FASTA record.
+"""
+
+from pathlib import Path
+
+RUN = Path(
+    "/hpctmp/e0958567/Braden_16S_20260819/"
+    "20_FINAL_reanalysis_20260903"
+)
+
+MANIFEST = RUN / "manifests/all_576_midgut_samples.txt"
+
+BASELINE = (
+    RUN / "03_ngspeciesid_racon/min2_baseline/samples"
+)
+
+RESCUE = (
+    RUN / "03_ngspeciesid_racon/min2_rescue/samples"
+)
+
+OUTDIR = (
+    RUN / "code_recovery_20261006/reconstructed/output"
+)
+
+OUT_FASTA = OUTDIR / "pooled_racon_polished_576.fasta"
+
+OUT_PROV = (
+    OUTDIR /
+    "pooled_racon_polished_576_provenance.tsv"
+)
+
+
+def read_single_fasta(path):
+    name = None
+    seq = []
+
+    with open(path) as handle:
+        for line in handle:
+            line = line.strip()
+
+            if not line:
+                continue
+
+            if line.startswith(">"):
+                if name is not None:
+                    raise ValueError(
+                        "More than one FASTA record in %s" % path
+                    )
+
+                name = line[1:]
+            else:
+                seq.append(line)
+
+    if name is None or not seq:
+        raise ValueError(
+            "No valid FASTA record in %s" % path
+        )
+
+    return "".join(seq)
+
+
+def count_fastq_reads(path):
+    n_lines = 0
+
+    with open(path) as handle:
+        for _ in handle:
+            n_lines += 1
+
+    if n_lines % 4 != 0:
+        raise ValueError(
+            "FASTQ line count not divisible by 4: %s" % path
+        )
+
+    return n_lines // 4
+
+
+with open(MANIFEST) as handle:
+    samples = [
+        line.strip()
+        for line in handle
+        if line.strip()
+    ]
+
+if len(samples) != 576:
+    raise ValueError(
+        "Expected 576 manifest samples, found %d"
+        % len(samples)
+    )
+
+
+rescue_samples = {
+    p.name
+    for p in RESCUE.iterdir()
+    if p.is_dir()
+}
+
+if len(rescue_samples) != 8:
+    raise ValueError(
+        "Expected 8 rescue sample directories, found %d"
+        % len(rescue_samples)
+    )
+
+
+OUTDIR.mkdir(parents=True, exist_ok=True)
+
+counter = 0
+source_counts = {
+    "ORIGINAL": 0,
+    "RESCUE": 0,
+}
+
+sample_counts = {
+    "ORIGINAL": 0,
+    "RESCUE": 0,
+}
+
+
+with open(OUT_FASTA, "w", newline="\n") as fasta_out, \
+     open(OUT_PROV, "w", newline="\n") as prov_out:
+
+    prov_out.write(
+        "sequence_id\t"
+        "sample_id\t"
+        "cluster_id\t"
+        "supporting_reads\t"
+        "source\n"
+    )
+
+    for sample in samples:
+
+        if sample in rescue_samples:
+            sample_dir = RESCUE / sample
+            source = "RESCUE"
+        else:
+            sample_dir = BASELINE / sample
+            source = "ORIGINAL"
+
+        if not sample_dir.is_dir():
+            raise FileNotFoundError(
+                "Missing sample directory: %s"
+                % sample_dir
+            )
+
+        sample_counts[source] += 1
+
+        successful = []
+
+        for consensus in sample_dir.glob(
+            "racon_cl_id_*/consensus.fasta"
+        ):
+            dirname = consensus.parent.name
+
+            if not dirname.startswith("racon_cl_id_"):
+                continue
+
+            cluster_id = dirname.replace(
+                "racon_cl_id_", "", 1
+            )
+
+            successful.append(
+                (cluster_id, consensus)
+            )
+
+        # Historical behaviour:
+        # lexicographic string ordering, NOT numeric ordering.
+        successful.sort(
+            key=lambda x: x[0]
+        )
+
+        for cluster_id, consensus_path in successful:
+
+            fastq_path = (
+                sample_dir /
+                ("reads_to_consensus_%s.fastq" % cluster_id)
+            )
+
+            if not fastq_path.is_file():
+                raise FileNotFoundError(
+                    "Missing polishing FASTQ: %s"
+                    % fastq_path
+                )
+
+            supporting_reads = count_fastq_reads(
+                fastq_path
+            )
+
+            sequence = read_single_fasta(
+                consensus_path
+            )
+
+            counter += 1
+
+            sequence_id = "RACON_%06d" % counter
+
+            fasta_out.write(
+                ">%s\n%s\n"
+                % (sequence_id, sequence)
+            )
+
+            prov_out.write(
+                "%s\t%s\t%s\t%d\t%s\n"
+                % (
+                    sequence_id,
+                    sample,
+                    cluster_id,
+                    supporting_reads,
+                    source,
+                )
+            )
+
+            source_counts[source] += 1
+
+            if counter % 2000 == 0:
+                print(
+                    "Reconstructed %d of 22528 consensuses..." % counter,
+                    flush=True
+                )
+
+            if counter % 2000 == 0:
+                print(
+                    "Reconstructed %d of 22528 consensuses..." % counter,
+                    flush=True
+                )
+
+
+if counter != 22528:
+    raise ValueError(
+        "Expected 22,528 pooled consensuses, found %d"
+        % counter
+    )
+
+
+print("Reconstruction complete.")
+print("Samples:", len(samples))
+print("Sample counts:", sample_counts)
+print("Consensus counts:", source_counts)
+print("Total consensuses:", counter)
+print("FASTA:", OUT_FASTA)
+print("Provenance:", OUT_PROV)

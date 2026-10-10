@@ -1,0 +1,80 @@
+#!/bin/bash
+
+#PBS -N Kraken2_final
+#PBS -q serial
+#PBS -l select=1:ncpus=1:mem=12gb
+#PBS -j oe
+
+set -e
+set -o pipefail
+
+module purge
+module load miniconda/4.12
+source "$(conda info --base)/etc/profile.d/conda.sh"
+conda activate "/hpctmp/e0958567/conda_envs/kraken2"
+
+export LC_ALL=C
+export LANG=C
+
+DB="/hpctmp/e0958567/kraken2_db/k2_standard_08gb_20230605"
+OUT="/hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/06_taxonomy/kraken2_final"
+
+MC="/hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/vsearch97/otu97_centroids_UPPERCASE.fasta"
+LC="/hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/vsearch97/0p1pct/otu97_centroids_UPPERCASE.fasta"
+MC_UNASSIGNED="/hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/06_taxonomy/greengenes2_MC_LC_final/LC_max0p5pct_20reads/unassigned_OTUs.fasta"
+LC_UNASSIGNED="/hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/06_taxonomy/greengenes2_MC_LC_final/MC_0p1pct/unassigned_OTUs.fasta"
+
+echo "=================================================="
+echo "KRAKEN2 FINAL MC/LC CLASSIFICATION"
+echo "=================================================="
+date
+kraken2 --version
+
+echo
+echo "Scope:"
+echo "576 MIDGUT samples only; reproductive-organ samples excluded"
+echo "MC = max(0.5%,20 reads) = 867 OTUs"
+echo "LC = 0.1% = 7642 OTUs"
+
+echo
+echo "Database:"
+echo "$DB"
+
+echo
+echo "===== 1. FULL MC ====="
+kraken2   --db "$DB"   --threads 1   --use-names   --report "$OUT/MC_full.report.tsv"   --output "$OUT/MC_full.kraken.tsv"   "$MC"
+
+echo
+echo "===== 2. FULL LC ====="
+kraken2   --db "$DB"   --threads 1   --use-names   --report "$OUT/LC_full.report.tsv"   --output "$OUT/LC_full.kraken.tsv"   "$LC"
+
+echo
+echo "===== 3. GG2 >=97% UNASSIGNED MC ====="
+kraken2   --db "$DB"   --threads 1   --use-names   --report "$OUT/MC_GG2_97_unassigned.report.tsv"   --output "$OUT/MC_GG2_97_unassigned.kraken.tsv"   "$MC_UNASSIGNED"
+
+echo
+echo "===== 4. GG2 >=97% UNASSIGNED LC ====="
+kraken2   --db "$DB"   --threads 1   --use-names   --report "$OUT/LC_GG2_97_unassigned.report.tsv"   --output "$OUT/LC_GG2_97_unassigned.kraken.tsv"   "$LC_UNASSIGNED"
+
+echo
+echo "=================================================="
+echo "OUTPUT COUNTS"
+echo "=================================================="
+
+for x in   MC_full   LC_full   MC_GG2_97_unassigned   LC_GG2_97_unassigned
+do
+    echo
+    echo "$x"
+    echo "Kraken classifications:"
+    wc -l "$OUT/${x}.kraken.tsv"
+
+    echo "Classified:"
+    awk -F '\t' '$1=="C"{n++} END{print n+0}' "$OUT/${x}.kraken.tsv"
+
+    echo "Unclassified:"
+    awk -F '\t' '$1=="U"{n++} END{print n+0}' "$OUT/${x}.kraken.tsv"
+done
+
+echo
+echo "Finished:"
+date

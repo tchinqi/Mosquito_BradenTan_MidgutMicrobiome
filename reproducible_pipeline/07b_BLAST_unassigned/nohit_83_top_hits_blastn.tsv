@@ -1,0 +1,189 @@
+OTU	category	reads	samples	sciname	taxid	pident	qcov	possible_chimera	align_len	qlen	evalue	bitscore	accession	title
+OTU_75	Mosquito (Culicidae)	18989.0	81	Aedes albopictus	7160	86.67	15.2	yes	75	494	1.76153e-12	87.848	XR_003897915	PREDICTED: Aedes albopictus uncharacterized LOC115267654 (LOC115267654), ncRNA
+OTU_27	No hit	15600.0	5											
+OTU_831	No hit	7186.0	16											
+OTU_12	No hit	5281.0	10											
+OTU_327	No hit	2283.0	43											
+OTU_260	No hit	2218.0	22											
+OTU_657	No hit	2154.0	3											
+OTU_857	No hit	1895.0	12											
+OTU_6	No hit	1721.0	11											
+OTU_353	No hit	1663.0	2											
+OTU_20	No hit	1549.0	6											
+OTU_659	No hit	1414.0	13											
+OTU_76	No hit	1379.0	15											
+OTU_358	No hit	1256.0	17											
+OTU_201	No hit	947.0	14											
+OTU_362	No hit	857.0	23											
+OTU_840	Other vertebrate	757.0	17	Scomber australasicus	29150	68.32	96.6		382	385	1.86467e-23	124.817	AP045416	Scomber australasicus DNA, Primary haplotype, chromosome 4, sequence
+OTU_107	No hit	726.0	9											
+OTU_807	No hit	713.0	3											
+OTU_415	No hit	673.0	6											
+OTU_264	No hit	618.0	13											
+OTU_824	No hit	614.0	1											
+OTU_627	No hit	587.0	7											
+OTU_174	No hit	585.0	13											
+OTU_3	No hit	579.0	13											
+OTU_52	No hit	575.0	6											
+OTU_18	No hit	542.0	4											
+OTU_397	No hit	519.0	6											
+OTU_64	No hit	463.0	8											
+OTU_437	No hit	455.0	3											
+OTU_585	Bacteria (<97% identity)	429.0	9	Yersinia entomophaga	935293	78.29	96.0		350	426	7.75868e-67	269.087	CP010029	Yersinia entomophaga strain MH96 genome
+OTU_4	No hit	407.0	2											
+OTU_154	No hit	402.0	5											
+OTU_832	No hit	392.0	2											
+OTU_445	No hit	391.0	3											
+OTU_853	Mosquito (Culicidae)	334.0	2	Aedes aegypti	7159	76.03	36.7	yes	146	371	2.48705e-15	97.7665	AC150257	Aedes aegypti, clone XX-97O18, complete sequence
+OTU_34	No hit	333.0	5											
+OTU_99	No hit	317.0	4											
+OTU_117	No hit	295.0	8											
+OTU_37	No hit	294.0	6											
+OTU_860	No hit	282.0	5											
+OTU_78	No hit	278.0	4											
+OTU_74	No hit	277.0	7											
+OTU_639	No hit	257.0	4											
+OTU_576	No hit	240.0	5											
+OTU_122	No hit	230.0	3											
+OTU_134	No hit	227.0	6											
+OTU_2	No hit	224.0	4											
+OTU_39	No hit	222.0	6											
+OTU_136	No hit	221.0	2											
+OTU_195	No hit	210.0	2											
+OTU_77	No hit	196.0	1											
+OTU_43	No hit	190.0	3											
+OTU_844	No hit	182.0	6											
+OTU_31	No hit	175.0	6											
+OTU_630	No hit	162.0	3											
+OTU_715	No hit	146.0	3											
+OTU_1	No hit	143.0	5											
+OTU_459	No hit	141.0	1											
+OTU_635	No hit	137.0	4											
+OTU_842	No hit	131.0	2											
+OTU_843	Mosquito (Culicidae)	127.0	1	Aedes albopictus	7160	77.34	31.9	yes	128	382	7.3616e-16	98.6682	XR_009998903	PREDICTED: Aedes albopictus uncharacterized LOC134291049 (LOC134291049), ncRNA
+OTU_25	Mosquito (Culicidae)	121.0	2	Aedes albopictus	7160	80.53	19.8	yes	113	545	3.10491e-16	101.373	XM_029864808	PREDICTED: Aedes albopictus uncharacterized LOC109418256 (LOC109418256), transcript variant X1, mRNA
+OTU_846	No hit	121.0	2											
+OTU_674	No hit	115.0	2											
+OTU_16	No hit	114.0	3											
+OTU_837	No hit	114.0	3											
+OTU_176	No hit	112.0	1											
+OTU_7	No hit	111.0	2											
+OTU_825	No hit	111.0	4											
+OTU_867	No hit	109.0	2											
+OTU_495	No hit	102.0	1											
+OTU_676	No hit	101.0	3											
+OTU_28	No hit	98.0	1											
+OTU_63	No hit	98.0	2											
+OTU_679	No hit	98.0	1											
+OTU_700	Mosquito (Culicidae)	96.0	1	Culex quinquefasciatus	7176	74.06	96.9		401	414	4.74444e-63	256.463	XM_038260978	Culex quinquefasciatus uncharacterized protein LOC119769079 (LOC119769079), mRNA
+OTU_10	No hit	94.0	3											
+OTU_95	No hit	93.0	1											
+OTU_131	No hit	92.0	2											
+OTU_839	No hit	92.0	2											
+OTU_137	No hit	91.0	3											
+OTU_96	No hit	90.0	3											
+OTU_845	No hit	89.0	1											
+OTU_833	No hit	88.0	2											
+OTU_456	No hit	85.0	3											
+OTU_29	Other vertebrate	82.0	2	Danio rerio	7955	91.15	21.0	yes	113	537	3.71934e-34	159.983	FP325111	Zebrafish DNA sequence from clone CH1073-232I9 in linkage group 11, complete sequence
+OTU_629	No hit	73.0	2											
+OTU_750	No hit	73.0	2											
+OTU_5	No hit	70.0	1											
+OTU_83	No hit	70.0	2											
+OTU_838	Other vertebrate	65.0	1	Tachysurus fulvidraco	1234273	84.81	20.1	yes	79	388	5.7586e-11	83.3396	XM_027142452	PREDICTED: Tachysurus fulvidraco neuromedin-U receptor 1-like (LOC113640094), transcript variant X1, mRNA
+OTU_538	No hit	62.0	1											
+OTU_726	No hit	62.0	2											
+OTU_398	No hit	61.0	2											
+OTU_829	No hit	61.0	1											
+OTU_863	No hit	61.0	1											
+OTU_633	No hit	58.0	2											
+OTU_148	No hit	57.0	1											
+OTU_861	No hit	54.0	1											
+OTU_226	No hit	53.0	1											
+OTU_212	No hit	52.0	2											
+OTU_725	No hit	52.0	1											
+OTU_854	Virus	52.0	1	Mampikony meta-like virus	3783044	88.1	22.6	yes	84	368	3.00247e-14	93.2581	PZ763361	MAG: Mampikony meta-like virus isolate MAD1789 sequence
+OTU_9	No hit	50.0	1											
+OTU_132	No hit	49.0	1											
+OTU_684	No hit	49.0	2											
+OTU_730	No hit	49.0	2											
+OTU_313	No hit	48.0	1											
+OTU_851	No hit	47.0	1											
+OTU_133	No hit	46.0	1											
+OTU_82	No hit	46.0	1											
+OTU_87	No hit	45.0	2											
+OTU_21	No hit	44.0	1											
+OTU_552	No hit	43.0	1											
+OTU_850	Mosquito (Culicidae)	43.0	2	Aedes aegypti	7159	70.15	86.9		325	373	6.70796e-29	142.851	AY009101	Aedes aegypti LTR retrotransposon Mosqcopia-Aa2 unknown protein, complete cds; and transposon Microuli-Aa1, complete sequence
+OTU_261	Mosquito (Culicidae)	42.0	2	Aedes albopictus	7160	78.83	99.3		444	447	6.26129e-100	378.19	XM_062846680	PREDICTED: Aedes albopictus uncharacterized LOC134285598 (LOC134285598), mRNA
+OTU_661	No hit	41.0	2											
+OTU_830	No hit	41.0	1											
+OTU_26	No hit	40.0	1											
+OTU_866	No hit	40.0	1											
+OTU_14	No hit	39.0	1											
+OTU_175	No hit	39.0	1											
+OTU_32	No hit	39.0	1											
+OTU_115	No hit	37.0	1											
+OTU_147	No hit	37.0	1											
+OTU_660	No hit	36.0	1											
+OTU_22	No hit	35.0	1											
+OTU_249	No hit	35.0	1											
+OTU_514	Mosquito (Culicidae)	35.0	1	Aedes albopictus	7160	75.78	51.7	yes	223	429	4.33211e-32	152.769	XM_062846203	PREDICTED: Aedes albopictus uncharacterized LOC134285451 (LOC134285451), mRNA
+OTU_849	No hit	35.0	1											
+OTU_568	No hit	34.0	1											
+OTU_121	Mosquito (Culicidae)	33.0	1	Aedes albopictus	7160	81.19	42.8	yes	202	472	1.56711e-44	194.247	XM_019675027	PREDICTED: Aedes albopictus BTB/POZ domain-containing protein 7 (LOC109402361), mRNA
+OTU_518	No hit	33.0	1											
+OTU_587	No hit	33.0	1											
+OTU_67	No hit	32.0	1											
+OTU_51	No hit	30.0	1											
+OTU_632	No hit	30.0	1											
+OTU_835	No hit	30.0	1											
+OTU_856	No hit	30.0	1											
+OTU_185	No hit	29.0	1											
+OTU_210	Mosquito (Culicidae)	29.0	1	Anopheles coustani	139045	79.07	99.3		454	455	3.53109e-103	389.011	XM_058268247	PREDICTED: Anopheles coustani tubulin-specific chaperone D (LOC131265903), mRNA
+OTU_240	No hit	29.0	1											
+OTU_42	Mosquito (Culicidae)	29.0	1	Armigeres subalbatus	124917	75.0	38.2	yes	204	519	1.09752e-21	119.407	XR_009978116	PREDICTED: Armigeres subalbatus uncharacterized LOC134205353 (LOC134205353), transcript variant X3, misc_RNA
+OTU_859	No hit	29.0	1											
+OTU_865	No hit	29.0	1											
+OTU_848	No hit	28.0	1											
+OTU_862	No hit	28.0	1											
+OTU_222	No hit	27.0	1											
+OTU_383	No hit	27.0	1											
+OTU_601	No hit	27.0	1											
+OTU_758	Mosquito (Culicidae)	27.0	1	Anopheles ziemanni	345580	77.84	86.5		379	408	3.58599e-77	302.449	XM_058315608	PREDICTED: Anopheles ziemanni serine-rich adhesin for platelets (LOC131286626), mRNA
+OTU_864	No hit	27.0	1											
+OTU_756	No hit	26.0	1											
+OTU_777	No hit	26.0	1											
+OTU_127	No hit	25.0	1											
+OTU_671	No hit	25.0	1											
+OTU_834	Mosquito (Culicidae)	25.0	1	Aedes albopictus	7160	88.57	17.5	yes	70	394	1.37757e-12	87.848	XM_062858206	PREDICTED: Aedes albopictus uncharacterized LOC109408820 (LOC109408820), mRNA
+OTU_847	Mosquito (Culicidae)	25.0	1	Aedes albopictus	7160	91.43	18.0	yes	70	378	3.09373e-14	93.2581	XM_062858206	PREDICTED: Aedes albopictus uncharacterized LOC109408820 (LOC109408820), mRNA
+OTU_852	No hit	25.0	1											
+OTU_13	No hit	24.0	1											
+OTU_393	No hit	24.0	1											
+OTU_680	No hit	24.0	1											
+OTU_741	No hit	24.0	1											
+OTU_80	No hit	24.0	1											
+OTU_827	No hit	24.0	1											
+OTU_116	No hit	23.0	1											
+OTU_153	No hit	23.0	1											
+OTU_211	No hit	23.0	1											
+OTU_8	No hit	23.0	1											
+OTU_858	No hit	23.0	1											
+OTU_36	No hit	22.0	1											
+OTU_54	No hit	22.0	1											
+OTU_749	No hit	22.0	1											
+OTU_775	No hit	22.0	1											
+OTU_238	No hit	21.0	1											
+OTU_702	No hit	21.0	1											
+OTU_717	No hit	21.0	1											
+OTU_73	No hit	21.0	1											
+OTU_836	Mosquito (Culicidae)	21.0	1	Aedes albopictus	7160	88.57	17.4	yes	70	391	1.66405e-11	84.2413	XM_062858206	PREDICTED: Aedes albopictus uncharacterized LOC109408820 (LOC109408820), mRNA
+OTU_855	No hit	21.0	1											
+OTU_92	No hit	21.0	1											
+OTU_24	No hit	21.0	1											
+OTU_242	No hit	20.0	1											
+OTU_622	No hit	20.0	1											
+OTU_669	No hit	20.0	1											
+OTU_692	No hit	20.0	1											
+OTU_841	No hit	20.0	1											

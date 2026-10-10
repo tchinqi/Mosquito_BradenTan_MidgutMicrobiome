@@ -1,0 +1,213 @@
+#!/bin/bash
+
+#PBS -N braden_min2
+#PBS -q serial
+#PBS -l select=1:ncpus=1:mem=2gb
+#PBS -j oe
+
+set -euo pipefail
+
+PROJECT="/hpctmp/e0958567/Braden_16S_20260819"
+RUN="$PROJECT/20_FINAL_reanalysis_20260903"
+PATCH="$RUN/software/ngspeciesid_min2_continue"
+
+MANIFEST="$RUN/manifests/all_576_midgut_samples.txt"
+COUNTS="$RUN/01_demux_length_qc/sample_read_counts.tsv"
+INPUT_DIR="$RUN/inputs/03b_length_filtered_fastq"
+
+OUTBASE="$RUN/03_ngspeciesid_racon/min2_baseline"
+SAMPLE_OUT="$OUTBASE/samples"
+SUMMARY="$OUTBASE/sample_summary.tsv"
+FAILURES="$OUTBASE/sample_failures.tsv"
+
+mkdir -p "$SAMPLE_OUT"
+
+module purge
+unset PYTHONPATH
+module load miniconda/4.12
+source "$(conda info --base)/etc/profile.d/conda.sh"
+conda activate /hpctmp/e0958567/conda_envs/ngspeciesid-0.3.1
+
+export PYTHONPATH="$PATCH"
+export LC_ALL=C
+export LANG=C
+export PATH="$HOME/bin:$PATH"
+
+echo "============================================================"
+echo "MINIMUM-2 RACON BASELINE — 576 MIDGUT WELLS"
+echo "============================================================"
+echo "Started: $(date -Is)"
+echo "Technical minimum: 2 supporting reads"
+echo "No additional abundance threshold"
+echo "Racon iterations: 3"
+echo "Patched consensus module:"
+python - <<'PY'
+import modules.consensus
+print(modules.consensus.__file__)
+PY
+echo
+
+printf \
+"sample_id\tdemultiplexed_reads\treads_350_550\teffective_cutoff_reads\tabundance_ratio\tfinal_racon_consensuses\trepresented_supporting_reads\tfailed_racon_clusters\tfailed_cluster_supporting_reads\tstatus\n" \
+> "$SUMMARY"
+
+printf "sample_id\treason\n" > "$FAILURES"
+
+while IFS= read -r SAMPLE
+do
+    [[ -n "$SAMPLE" ]] || continue
+
+    INPUT="$INPUT_DIR/${SAMPLE}_filtered.fastq"
+    OUT="$SAMPLE_OUT/$SAMPLE"
+
+    ROW=$(awk -F'\t' -v s="$SAMPLE" \
+        'NR>1 && $1==s {print $2"\t"$3; exit}' "$COUNTS")
+
+    DEMUX_N=$(printf "%s\n" "$ROW" | cut -f1)
+    N=$(printf "%s\n" "$ROW" | cut -f2)
+
+    if [[ ! -s "$INPUT" ]]; then
+        printf "%s\tmissing_input\n" "$SAMPLE" >> "$FAILURES"
+        continue
+    fi
+
+    # NGSpeciesID calculates:
+    # int(abundance_ratio * N)
+    # 2.5/N therefore produces an effective integer cutoff of 2.
+    AR=$(awk -v n="$N" 'BEGIN {printf "%.15f", 2.5/n}')
+
+    CHECK=$(awk -v ar="$AR" -v n="$N" \
+        'BEGIN {print int(ar*n)}')
+
+    if [[ "$CHECK" -ne 2 ]]; then
+        echo "ERROR: min2 calculation failed for $SAMPLE" >&2
+        exit 1
+    fi
+
+    echo "------------------------------------------------------------"
+    echo "Sample: $SAMPLE"
+    echo "350-550 reads: $N"
+    echo "Technical cutoff: 2"
+
+    rm -rf "$OUT"
+    mkdir -p "$OUT"
+
+    set +e
+
+    NGSpeciesID \
+        --ont \
+        --fastq "$INPUT" \
+        --outfolder "$OUT" \
+        --consensus \
+        --abundance_ratio "$AR" \
+        --racon \
+        --racon_iter 3 \
+        --t 1
+
+    EXIT_STATUS=$?
+
+    set -e
+
+    CONS=0
+    SUPPORT=0
+
+    while IFS= read -r RACON
+    do
+        [[ -s "$RACON" ]] || continue
+
+        CONS=$((CONS + 1))
+
+        CLUSTER_DIR=$(basename "$(dirname "$RACON")")
+        CID="${CLUSTER_DIR#racon_cl_id_}"
+
+        READS="$OUT/reads_to_consensus_${CID}.fastq"
+
+        if [[ -s "$READS" ]]; then
+            X=$(awk 'END {print NR/4}' "$READS")
+            SUPPORT=$((SUPPORT + X))
+        fi
+
+    done < <(
+        find "$OUT" \
+            -mindepth 2 \
+            -maxdepth 2 \
+            -type f \
+            -path '*/racon_cl_id_*/racon_polished_it_2.fasta' \
+            -size +0c \
+            | sort
+    )
+
+    FAILED_CLUSTERS=0
+    FAILED_SUPPORT=0
+
+    if [[ -s "$OUT/racon_failed_clusters.tsv" ]]; then
+
+        FAILED_CLUSTERS=$(awk 'NR>1 {n++} END {print n+0}' \
+            "$OUT/racon_failed_clusters.tsv")
+
+        FAILED_SUPPORT=$(awk -F'\t' \
+            'NR>1 {s+=$2} END {print s+0}' \
+            "$OUT/racon_failed_clusters.tsv")
+    fi
+
+    if [[ "$EXIT_STATUS" -eq 0 ]]; then
+        STATUS="SUCCESS"
+    else
+        STATUS="FAILED_NGSPECIESID"
+        printf "%s\tNGSpeciesID_exit_%s\n" \
+            "$SAMPLE" "$EXIT_STATUS" >> "$FAILURES"
+    fi
+
+    printf \
+    "%s\t%s\t%s\t2\t%s\t%s\t%s\t%s\t%s\t%s\n" \
+    "$SAMPLE" \
+    "$DEMUX_N" \
+    "$N" \
+    "$AR" \
+    "$CONS" \
+    "$SUPPORT" \
+    "$FAILED_CLUSTERS" \
+    "$FAILED_SUPPORT" \
+    "$STATUS" \
+    >> "$SUMMARY"
+
+done < "$MANIFEST"
+
+echo
+echo "============================================================"
+echo "MIN2 FINAL SUMMARY"
+echo "============================================================"
+
+echo -n "Samples: "
+awk 'END {print NR-1}' "$SUMMARY"
+
+echo -n "SUCCESS: "
+awk -F'\t' 'NR>1 && $10=="SUCCESS" {n++} END {print n+0}' "$SUMMARY"
+
+echo -n "FAILED samples: "
+awk -F'\t' 'NR>1 && $10!="SUCCESS" {n++} END {print n+0}' "$SUMMARY"
+
+echo -n "Final polished consensuses: "
+awk -F'\t' 'NR>1 {s+=$6} END {print s+0}' "$SUMMARY"
+
+echo -n "Represented supporting reads: "
+awk -F'\t' 'NR>1 {s+=$7} END {print s+0}' "$SUMMARY"
+
+echo -n "Individual Racon clusters skipped: "
+awk -F'\t' 'NR>1 {s+=$8} END {print s+0}' "$SUMMARY"
+
+echo -n "Reads represented by skipped clusters: "
+awk -F'\t' 'NR>1 {s+=$9} END {print s+0}' "$SUMMARY"
+
+TOTAL_INPUT=$(awk -F'\t' 'NR>1 {s+=$3} END {print s+0}' "$SUMMARY")
+TOTAL_RECOVERED=$(awk -F'\t' 'NR>1 {s+=$7} END {print s+0}' "$SUMMARY")
+
+echo -n "350-550 bp input reads: "
+echo "$TOTAL_INPUT"
+
+echo -n "Represented-read recovery (%): "
+awk -v a="$TOTAL_RECOVERED" -v b="$TOTAL_INPUT" \
+'BEGIN {printf "%.4f\n", 100*a/b}'
+
+echo
+echo "Completed: $(date -Is)"

@@ -1,0 +1,163 @@
+#!/bin/bash
+
+#PBS -N braden_abs5_midgut
+#PBS -q serial
+#PBS -l select=1:ncpus=1:mem=4gb
+#PBS -j oe
+
+set -euo pipefail
+
+PROJECT="/hpctmp/e0958567/Braden_16S_20260819"
+RUN="$PROJECT/20_FINAL_reanalysis_20260903"
+
+MANIFEST="$RUN/manifests/all_576_midgut_samples.txt"
+COUNTS="$RUN/01_demux_length_qc/sample_read_counts.tsv"
+INPUT_DIR="$RUN/inputs/03b_length_filtered_fastq"
+
+OUTBASE="$RUN/03_ngspeciesid_racon/abs5"
+SAMPLE_OUT="$OUTBASE/samples"
+SUMMARY="$OUTBASE/sample_summary.tsv"
+FAILURES="$OUTBASE/failures.tsv"
+
+mkdir -p "$SAMPLE_OUT"
+
+module purge
+unset PYTHONPATH
+module load miniconda/4.12
+source "$(conda info --base)/etc/profile.d/conda.sh"
+conda activate /hpctmp/e0958567/conda_envs/ngspeciesid-0.3.1
+
+export LC_ALL=C
+export LANG=C
+export PATH="$HOME/bin:$PATH"
+
+echo "============================================================"
+echo "FINAL NGSPECIESID + RACON — ABSOLUTE 5 READS"
+echo "============================================================"
+echo "Started: $(date -Is)"
+echo "Midgut manifest: $(wc -l < "$MANIFEST") wells"
+echo "NGSpeciesID: $(NGSpeciesID --version 2>&1 | head -1)"
+echo
+
+printf \
+"sample_id\tdemultiplexed_reads\treads_350_550\ttest\teffective_cutoff_reads\tabundance_ratio\tpolished_consensuses\trepresented_supporting_reads\tstatus\n" \
+> "$SUMMARY"
+
+printf "sample_id\ttest\treason\n" > "$FAILURES"
+
+while IFS= read -r SAMPLE
+do
+    [[ -n "$SAMPLE" ]] || continue
+
+    INPUT="$INPUT_DIR/${SAMPLE}_filtered.fastq"
+    OUT="$SAMPLE_OUT/$SAMPLE"
+
+    ROW=$(awk -F'\t' -v s="$SAMPLE" \
+        'NR>1 && $1==s {print $2"\t"$3; exit}' "$COUNTS")
+
+    DEMUX_N=$(printf "%s\n" "$ROW" | cut -f1)
+    N=$(printf "%s\n" "$ROW" | cut -f2)
+
+    if [[ ! -s "$INPUT" ]]; then
+        printf "%s\tabs5\tmissing_input\n" "$SAMPLE" >> "$FAILURES"
+        continue
+    fi
+
+    CUTOFF=5
+
+    # NGSpeciesID:
+    # abundance_cutoff = int(abundance_ratio * N)
+    # 5.5/N safely gives int(...) = 5.
+    AR=$(awk -v n="$N" 'BEGIN {printf "%.15f", 5.5/n}')
+
+    CHECK=$(awk -v ar="$AR" -v n="$N" \
+        'BEGIN {print int(ar*n)}')
+
+    if [[ "$CHECK" -ne 5 ]]; then
+        echo "ERROR: cutoff calculation failed for $SAMPLE" >&2
+        exit 1
+    fi
+
+    echo "------------------------------------------------------------"
+    echo "Sample: $SAMPLE"
+    echo "Demultiplexed reads: $DEMUX_N"
+    echo "350-550 bp reads: $N"
+    echo "Effective cutoff: 5"
+    echo "abundance_ratio: $AR"
+
+    rm -rf "$OUT"
+    mkdir -p "$OUT"
+
+    set +e
+
+    NGSpeciesID \
+        --ont \
+        --fastq "$INPUT" \
+        --outfolder "$OUT" \
+        --consensus \
+        --abundance_ratio "$AR" \
+        --racon \
+        --racon_iter 3 \
+        --t 1
+
+    STATUS=$?
+
+    set -e
+
+    if [[ "$STATUS" -ne 0 ]]; then
+        printf \
+        "%s\t%s\t%s\tabs5\t5\t%s\t0\t0\tFAILED_NGSPECIESID\n" \
+        "$SAMPLE" "$DEMUX_N" "$N" "$AR" >> "$SUMMARY"
+
+        printf "%s\tabs5\tNGSpeciesID_exit_%s\n" \
+        "$SAMPLE" "$STATUS" >> "$FAILURES"
+
+        continue
+    fi
+
+    CONSENSUS_N=$(find "$OUT" -maxdepth 1 -type f \
+        -name 'consensus_reference_*.fasta' | wc -l)
+
+    SUPPORT=$(find "$OUT" -maxdepth 1 -type f \
+        -name 'consensus_reference_*.fasta' \
+        -exec grep '^>' {} \; \
+        | awk '
+        {
+            if (match($0,/total_supporting_reads_[0-9]+/)) {
+                x=substr($0,RSTART,RLENGTH)
+                sub(/total_supporting_reads_/,"",x)
+                s+=x
+            }
+        }
+        END {print s+0}
+        ')
+
+    printf \
+    "%s\t%s\t%s\tabs5\t5\t%s\t%s\t%s\tSUCCESS\n" \
+    "$SAMPLE" "$DEMUX_N" "$N" "$AR" \
+    "$CONSENSUS_N" "$SUPPORT" >> "$SUMMARY"
+
+done < "$MANIFEST"
+
+echo
+echo "============================================================"
+echo "FINAL ABS5 SUMMARY"
+echo "============================================================"
+
+echo -n "Midgut wells: "
+wc -l < "$MANIFEST"
+
+echo -n "SUCCESS: "
+awk -F'\t' 'NR>1 && $9=="SUCCESS" {n++} END {print n+0}' "$SUMMARY"
+
+echo -n "FAILED: "
+awk -F'\t' 'NR>1 && $9!="SUCCESS" {n++} END {print n+0}' "$SUMMARY"
+
+echo -n "Polished consensuses: "
+awk -F'\t' 'NR>1 && $9=="SUCCESS" {s+=$7} END {print s+0}' "$SUMMARY"
+
+echo -n "Represented supporting reads: "
+awk -F'\t' 'NR>1 && $9=="SUCCESS" {s+=$8} END {print s+0}' "$SUMMARY"
+
+echo
+echo "Completed: $(date -Is)"

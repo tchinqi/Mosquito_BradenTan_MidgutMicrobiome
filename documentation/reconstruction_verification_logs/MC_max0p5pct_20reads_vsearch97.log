@@ -1,0 +1,516 @@
+vsearch v2.31.0_linux_x86_64, 153.5GB RAM, 120 cores
+https://github.com/torognes/vsearch
+
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 0%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 1%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 2%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 3%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 4%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 5%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 6%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 7%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 8%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 9%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 10%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 11%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 12%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 13%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 14%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 15%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 16%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 17%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 18%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 19%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 20%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 21%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 22%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 23%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 24%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 25%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 26%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 27%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 28%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 29%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 30%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 31%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 32%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 33%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 34%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 35%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 36%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 37%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 38%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 39%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 40%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 41%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 42%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 43%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 44%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 45%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 46%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 47%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 48%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 49%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 50%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 51%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 52%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 53%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 54%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 55%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 56%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 57%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 58%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 59%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 60%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 61%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 62%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 63%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 64%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 65%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 66%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 67%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 68%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 69%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 70%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 71%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 72%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 73%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 74%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 75%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 76%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 77%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 78%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 79%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 80%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 81%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 82%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 83%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 84%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 85%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 86%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 87%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 88%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 89%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 90%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 91%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 92%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 93%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 94%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 95%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 96%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 97%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 98%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 99%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 100%
+Reading file /hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/LC_max0p5pct_20reads_postracon_filtered.fasta 100%
+3164736 nt in 7375 seqs, min 353, max 665, avg 429
+Masking 0%
+Masking 1%
+Masking 2%
+Masking 3%
+Masking 4%
+Masking 5%
+Masking 6%
+Masking 7%
+Masking 8%
+Masking 9%
+Masking 10%
+Masking 11%
+Masking 12%
+Masking 13%
+Masking 14%
+Masking 15%
+Masking 16%
+Masking 17%
+Masking 18%
+Masking 19%
+Masking 20%
+Masking 21%
+Masking 22%
+Masking 23%
+Masking 24%
+Masking 25%
+Masking 26%
+Masking 27%
+Masking 28%
+Masking 29%
+Masking 30%
+Masking 31%
+Masking 32%
+Masking 33%
+Masking 34%
+Masking 35%
+Masking 36%
+Masking 37%
+Masking 38%
+Masking 39%
+Masking 40%
+Masking 41%
+Masking 42%
+Masking 43%
+Masking 44%
+Masking 45%
+Masking 46%
+Masking 47%
+Masking 48%
+Masking 49%
+Masking 50%
+Masking 51%
+Masking 52%
+Masking 53%
+Masking 54%
+Masking 55%
+Masking 56%
+Masking 57%
+Masking 58%
+Masking 59%
+Masking 60%
+Masking 61%
+Masking 62%
+Masking 63%
+Masking 64%
+Masking 65%
+Masking 66%
+Masking 67%
+Masking 68%
+Masking 69%
+Masking 70%
+Masking 71%
+Masking 72%
+Masking 73%
+Masking 74%
+Masking 75%
+Masking 76%
+Masking 77%
+Masking 78%
+Masking 79%
+Masking 80%
+Masking 81%
+Masking 82%
+Masking 83%
+Masking 84%
+Masking 85%
+Masking 86%
+Masking 87%
+Masking 88%
+Masking 89%
+Masking 90%
+Masking 91%
+Masking 92%
+Masking 93%
+Masking 94%
+Masking 95%
+Masking 96%
+Masking 97%
+Masking 98%
+Masking 99%
+Masking 100%
+Sorting by length 0%
+Sorting by length 100%
+Counting k-mers 0%
+Counting k-mers 1%
+Counting k-mers 2%
+Counting k-mers 3%
+Counting k-mers 4%
+Counting k-mers 5%
+Counting k-mers 6%
+Counting k-mers 7%
+Counting k-mers 8%
+Counting k-mers 9%
+Counting k-mers 10%
+Counting k-mers 11%
+Counting k-mers 12%
+Counting k-mers 13%
+Counting k-mers 14%
+Counting k-mers 15%
+Counting k-mers 16%
+Counting k-mers 17%
+Counting k-mers 18%
+Counting k-mers 19%
+Counting k-mers 20%
+Counting k-mers 21%
+Counting k-mers 22%
+Counting k-mers 23%
+Counting k-mers 24%
+Counting k-mers 25%
+Counting k-mers 26%
+Counting k-mers 27%
+Counting k-mers 28%
+Counting k-mers 29%
+Counting k-mers 30%
+Counting k-mers 31%
+Counting k-mers 32%
+Counting k-mers 33%
+Counting k-mers 34%
+Counting k-mers 35%
+Counting k-mers 36%
+Counting k-mers 37%
+Counting k-mers 38%
+Counting k-mers 39%
+Counting k-mers 40%
+Counting k-mers 41%
+Counting k-mers 42%
+Counting k-mers 43%
+Counting k-mers 44%
+Counting k-mers 45%
+Counting k-mers 46%
+Counting k-mers 47%
+Counting k-mers 48%
+Counting k-mers 49%
+Counting k-mers 50%
+Counting k-mers 51%
+Counting k-mers 52%
+Counting k-mers 53%
+Counting k-mers 54%
+Counting k-mers 55%
+Counting k-mers 56%
+Counting k-mers 57%
+Counting k-mers 58%
+Counting k-mers 59%
+Counting k-mers 60%
+Counting k-mers 61%
+Counting k-mers 62%
+Counting k-mers 63%
+Counting k-mers 64%
+Counting k-mers 65%
+Counting k-mers 66%
+Counting k-mers 67%
+Counting k-mers 68%
+Counting k-mers 69%
+Counting k-mers 70%
+Counting k-mers 71%
+Counting k-mers 72%
+Counting k-mers 73%
+Counting k-mers 74%
+Counting k-mers 75%
+Counting k-mers 76%
+Counting k-mers 77%
+Counting k-mers 78%
+Counting k-mers 79%
+Counting k-mers 80%
+Counting k-mers 81%
+Counting k-mers 82%
+Counting k-mers 83%
+Counting k-mers 84%
+Counting k-mers 85%
+Counting k-mers 86%
+Counting k-mers 87%
+Counting k-mers 88%
+Counting k-mers 89%
+Counting k-mers 90%
+Counting k-mers 91%
+Counting k-mers 92%
+Counting k-mers 93%
+Counting k-mers 94%
+Counting k-mers 95%
+Counting k-mers 96%
+Counting k-mers 97%
+Counting k-mers 98%
+Counting k-mers 99%
+Counting k-mers 100%
+Clustering 0%
+Clustering 1%
+Clustering 2%
+Clustering 3%
+Clustering 4%
+Clustering 5%
+Clustering 6%
+Clustering 7%
+Clustering 8%
+Clustering 9%
+Clustering 10%
+Clustering 11%
+Clustering 12%
+Clustering 13%
+Clustering 14%
+Clustering 15%
+Clustering 16%
+Clustering 17%
+Clustering 18%
+Clustering 19%
+Clustering 20%
+Clustering 21%
+Clustering 22%
+Clustering 23%
+Clustering 24%
+Clustering 25%
+Clustering 26%
+Clustering 27%
+Clustering 28%
+Clustering 29%
+Clustering 30%
+Clustering 31%
+Clustering 32%
+Clustering 33%
+Clustering 34%
+Clustering 35%
+Clustering 36%
+Clustering 37%
+Clustering 38%
+Clustering 39%
+Clustering 40%
+Clustering 41%
+Clustering 42%
+Clustering 43%
+Clustering 44%
+Clustering 45%
+Clustering 46%
+Clustering 47%
+Clustering 48%
+Clustering 49%
+Clustering 50%
+Clustering 51%
+Clustering 52%
+Clustering 53%
+Clustering 54%
+Clustering 55%
+Clustering 56%
+Clustering 57%
+Clustering 58%
+Clustering 59%
+Clustering 60%
+Clustering 61%
+Clustering 62%
+Clustering 63%
+Clustering 64%
+Clustering 65%
+Clustering 66%
+Clustering 67%
+Clustering 68%
+Clustering 69%
+Clustering 70%
+Clustering 71%
+Clustering 72%
+Clustering 73%
+Clustering 74%
+Clustering 75%
+Clustering 76%
+Clustering 77%
+Clustering 78%
+Clustering 79%
+Clustering 80%
+Clustering 81%
+Clustering 82%
+Clustering 83%
+Clustering 84%
+Clustering 85%
+Clustering 86%
+Clustering 87%
+Clustering 88%
+Clustering 89%
+Clustering 90%
+Clustering 91%
+Clustering 92%
+Clustering 93%
+Clustering 94%
+Clustering 95%
+Clustering 96%
+Clustering 97%
+Clustering 98%
+Clustering 99%
+Clustering 100%
+Sorting clusters 0%
+Sorting clusters 100%
+Writing clusters 0%
+Writing clusters 1%
+Writing clusters 2%
+Writing clusters 3%
+Writing clusters 4%
+Writing clusters 5%
+Writing clusters 6%
+Writing clusters 7%
+Writing clusters 8%
+Writing clusters 9%
+Writing clusters 10%
+Writing clusters 11%
+Writing clusters 12%
+Writing clusters 13%
+Writing clusters 14%
+Writing clusters 15%
+Writing clusters 16%
+Writing clusters 17%
+Writing clusters 18%
+Writing clusters 19%
+Writing clusters 20%
+Writing clusters 21%
+Writing clusters 22%
+Writing clusters 23%
+Writing clusters 24%
+Writing clusters 25%
+Writing clusters 26%
+Writing clusters 27%
+Writing clusters 28%
+Writing clusters 29%
+Writing clusters 30%
+Writing clusters 31%
+Writing clusters 32%
+Writing clusters 33%
+Writing clusters 34%
+Writing clusters 35%
+Writing clusters 36%
+Writing clusters 37%
+Writing clusters 38%
+Writing clusters 39%
+Writing clusters 40%
+Writing clusters 41%
+Writing clusters 42%
+Writing clusters 43%
+Writing clusters 44%
+Writing clusters 45%
+Writing clusters 46%
+Writing clusters 47%
+Writing clusters 48%
+Writing clusters 49%
+Writing clusters 50%
+Writing clusters 51%
+Writing clusters 52%
+Writing clusters 53%
+Writing clusters 54%
+Writing clusters 55%
+Writing clusters 56%
+Writing clusters 57%
+Writing clusters 58%
+Writing clusters 59%
+Writing clusters 60%
+Writing clusters 61%
+Writing clusters 62%
+Writing clusters 63%
+Writing clusters 64%
+Writing clusters 65%
+Writing clusters 66%
+Writing clusters 67%
+Writing clusters 68%
+Writing clusters 69%
+Writing clusters 70%
+Writing clusters 71%
+Writing clusters 72%
+Writing clusters 73%
+Writing clusters 74%
+Writing clusters 75%
+Writing clusters 76%
+Writing clusters 77%
+Writing clusters 78%
+Writing clusters 79%
+Writing clusters 80%
+Writing clusters 81%
+Writing clusters 82%
+Writing clusters 83%
+Writing clusters 84%
+Writing clusters 85%
+Writing clusters 86%
+Writing clusters 87%
+Writing clusters 88%
+Writing clusters 89%
+Writing clusters 90%
+Writing clusters 91%
+Writing clusters 92%
+Writing clusters 93%
+Writing clusters 94%
+Writing clusters 95%
+Writing clusters 96%
+Writing clusters 97%
+Writing clusters 98%
+Writing clusters 99%
+Writing clusters 100%
+Clusters: 867 Size min 1, max 455, avg 8.5
+Singletons: 521, 7.1% of seqs, 60.1% of clusters

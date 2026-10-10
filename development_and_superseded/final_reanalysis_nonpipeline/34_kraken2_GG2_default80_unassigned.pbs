@@ -1,0 +1,120 @@
+#!/bin/bash
+#PBS -N Kraken_GG2_80U
+#PBS -q serial
+#PBS -l select=1:ncpus=1:mem=15gb
+#PBS -l walltime=08:00:00
+#PBS -j oe
+
+set -euo pipefail
+
+RUN="/hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903"
+DB="/hpctmp/e0958567/kraken2_db/k2_standard_08gb_20230605"
+IN="$RUN/06_taxonomy/kraken2_final/GG2_default80_unassigned"
+OUT="$RUN/06_taxonomy/kraken2_final/GG2_default80_unassigned"
+
+KRAKEN="/hpctmp/e0958567/conda_envs/kraken2/bin/kraken2"
+
+echo "============================================================"
+echo "Kraken2 classification of GG2 default/80%-Unassigned OTUs"
+echo "============================================================"
+echo
+"$KRAKEN" --version
+echo
+echo "Database: $DB"
+echo
+
+
+# ============================================================
+# LC
+# ============================================================
+
+echo "============================================================"
+echo "LC: 4,870 GG2-default/80%-Unassigned OTUs"
+echo "============================================================"
+
+"$KRAKEN" \
+    --db "$DB" \
+    --threads 1 \
+    --use-names \
+    --report "$OUT/LC_GG2_default80_unassigned.kraken.report" \
+    --output "$OUT/LC_GG2_default80_unassigned.kraken.tsv" \
+    "$IN/LC_GG2_default80_unassigned.fasta"
+
+LC_TOTAL=$(awk 'END{print NR}' \
+    "$OUT/LC_GG2_default80_unassigned.kraken.tsv")
+
+LC_CLASSIFIED=$(awk -F'\t' '$1=="C"{n++} END{print n+0}' \
+    "$OUT/LC_GG2_default80_unassigned.kraken.tsv")
+
+LC_UNCLASSIFIED=$(awk -F'\t' '$1=="U"{n++} END{print n+0}' \
+    "$OUT/LC_GG2_default80_unassigned.kraken.tsv")
+
+echo
+echo "LC VALIDATION"
+echo "Input OTUs:        $LC_TOTAL"
+echo "Kraken classified: $LC_CLASSIFIED"
+echo "Kraken unclassified: $LC_UNCLASSIFIED"
+echo "Accounting: $((LC_CLASSIFIED + LC_UNCLASSIFIED)) / $LC_TOTAL"
+
+if [ "$LC_TOTAL" -ne 4870 ]; then
+    echo "ERROR: LC expected 4870 OTUs"
+    exit 1
+fi
+
+if [ $((LC_CLASSIFIED + LC_UNCLASSIFIED)) -ne "$LC_TOTAL" ]; then
+    echo "ERROR: LC Kraken accounting failed"
+    exit 1
+fi
+
+echo "LC accounting PASS"
+echo
+
+
+# ============================================================
+# MC
+# ============================================================
+
+echo "============================================================"
+echo "MC: 186 GG2-default/80%-Unassigned OTUs"
+echo "============================================================"
+
+"$KRAKEN" \
+    --db "$DB" \
+    --threads 1 \
+    --use-names \
+    --report "$OUT/MC_GG2_default80_unassigned.kraken.report" \
+    --output "$OUT/MC_GG2_default80_unassigned.kraken.tsv" \
+    "$IN/MC_GG2_default80_unassigned.fasta"
+
+MC_TOTAL=$(awk 'END{print NR}' \
+    "$OUT/MC_GG2_default80_unassigned.kraken.tsv")
+
+MC_CLASSIFIED=$(awk -F'\t' '$1=="C"{n++} END{print n+0}' \
+    "$OUT/MC_GG2_default80_unassigned.kraken.tsv")
+
+MC_UNCLASSIFIED=$(awk -F'\t' '$1=="U"{n++} END{print n+0}' \
+    "$OUT/MC_GG2_default80_unassigned.kraken.tsv")
+
+echo
+echo "MC VALIDATION"
+echo "Input OTUs:        $MC_TOTAL"
+echo "Kraken classified: $MC_CLASSIFIED"
+echo "Kraken unclassified: $MC_UNCLASSIFIED"
+echo "Accounting: $((MC_CLASSIFIED + MC_UNCLASSIFIED)) / $MC_TOTAL"
+
+if [ "$MC_TOTAL" -ne 186 ]; then
+    echo "ERROR: MC expected 186 OTUs"
+    exit 1
+fi
+
+if [ $((MC_CLASSIFIED + MC_UNCLASSIFIED)) -ne "$MC_TOTAL" ]; then
+    echo "ERROR: MC Kraken accounting failed"
+    exit 1
+fi
+
+echo "MC accounting PASS"
+
+echo
+echo "============================================================"
+echo "KRAKEN2 DEFAULT/80%-UNASSIGNED WORKFLOW COMPLETE"
+echo "============================================================"

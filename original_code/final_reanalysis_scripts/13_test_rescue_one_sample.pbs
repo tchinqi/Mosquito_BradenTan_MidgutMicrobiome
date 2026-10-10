@@ -1,0 +1,85 @@
+#!/bin/bash
+
+#PBS -N rescue_test
+#PBS -q serial
+#PBS -l select=1:ncpus=1:mem=2gb
+#PBS -j oe
+
+set -euo pipefail
+
+RUN="/hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903"
+PATCH="$RUN/software/ngspeciesid_min2_continue"
+
+SAMPLE="sample_0820CW-3_AG_P01_16S"
+INPUT="$RUN/inputs/03b_length_filtered_fastq/${SAMPLE}_filtered.fastq"
+OUT="$RUN/03_ngspeciesid_racon/min2_rescue_test/$SAMPLE"
+
+module purge
+unset PYTHONPATH
+module load miniconda/4.12
+source "$(conda info --base)/etc/profile.d/conda.sh"
+conda activate /hpctmp/e0958567/conda_envs/ngspeciesid-0.3.1
+
+export PYTHONPATH="$PATCH"
+export LC_ALL=C
+export LANG=C
+export PATH="$HOME/bin:$PATH"
+
+echo "===== MODULE CHECK ====="
+python - <<'PY'
+import modules.consensus
+print(modules.consensus.__file__)
+PY
+
+echo
+echo "===== INPUT ====="
+echo "$INPUT"
+seqkit stats "$INPUT"
+
+N=$(seqkit stats -T "$INPUT" | awk 'NR==2 {print $4}')
+
+# NGSpeciesID uses int(abundance_ratio * N).
+# 2.5/N gives an effective cutoff of exactly 2.
+AR=$(awk -v n="$N" 'BEGIN {printf "%.15f", 2.5/n}')
+
+echo
+echo "Reads after length filtering: $N"
+echo "Abundance ratio supplied: $AR"
+echo -n "Effective cutoff: "
+awk -v n="$N" -v ar="$AR" 'BEGIN {print int(n*ar)}'
+
+rm -rf "$OUT"
+mkdir -p "$OUT"
+
+echo
+echo "===== START NGSPECIESID ====="
+date
+
+NGSpeciesID \
+  --ont \
+  --fastq "$INPUT" \
+  --outfolder "$OUT" \
+  --consensus \
+  --abundance_ratio "$AR" \
+  --racon \
+  --racon_iter 3 \
+  --t 1
+
+echo
+echo "===== COMPLETED ====="
+date
+
+echo
+echo "Final Racon consensuses:"
+find "$OUT" \
+  -type f \
+  -path '*/racon_cl_id_*/racon_polished_it_2.fasta' \
+  -size +0c | wc -l
+
+echo
+echo "Skipped Racon clusters:"
+if [[ -s "$OUT/racon_failed_clusters.tsv" ]]; then
+    cat "$OUT/racon_failed_clusters.tsv"
+else
+    echo "None"
+fi

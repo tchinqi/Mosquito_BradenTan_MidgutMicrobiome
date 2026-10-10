@@ -1,0 +1,66 @@
+#PBS -q serial
+#PBS -l select=1:ncpus=1:mem=8gb
+#PBS -j oe
+#PBS -N Braden_GG2_extract
+# =============================================================================
+# Script 12 - 12_gg2_extract_v3v4.pbs
+# LSM4288 FYP: mosquito midgut 16S rRNA (Nanopore, V3-V4)
+# Author  : Braden Tan (Tan Chin Qi Braden), NUS; Puniamoorthy lab
+# Step    : Reference preparation
+# Purpose : Extracts the 338F-806R region (350-550 bp, both orientations) from
+#           the Greengenes2 2022.10 full-length backbone with QIIME 2.
+# Input   : 2022.10.backbone.full-length.fna.qza
+# Output  : gg2_2022_10_338F_806R.qza (+ extraction stats)
+# Run on  : Atlas9 PBS job (QIIME 2 2026.7)
+# Release : Header added for the code release (10 Oct 2026); comments only,
+#           code unchanged. Unedited original: original_code/.
+# =============================================================================
+
+module purge
+unset PYTHONPATH
+module load miniconda/4.12
+source "$(conda info --base)/etc/profile.d/conda.sh"
+
+conda activate /hpctmp/e0958567/conda_envs/rachis-qiime2-2026.7
+
+cd /hpctmp/e0958567/Braden_16S_20260819 || exit 1
+
+echo "========================================"
+echo "Greengenes2 2022.10 V3-V4 extraction"
+date
+echo "========================================"
+
+qiime feature-classifier extract-reads \
+  --i-sequences 10_greengenes_test/reference/2022.10.backbone.full-length.fna.qza \
+  --p-f-primer ACTCCTACGGGAGGCAGCAG \
+  --p-r-primer GGACTACHVGGGTWTCTAAT \
+  --p-min-length 350 \
+  --p-max-length 550 \
+  --p-n-jobs 1 \
+  --p-read-orientation both \
+  --o-reads 10_greengenes_test/reference/gg2_2022_10_338F_806R.qza \
+  --o-read-extraction-stats 10_greengenes_test/reference/gg2_2022_10_338F_806R_stats.qza
+
+STATUS=$?
+
+echo
+echo "QIIME exit status: $STATUS"
+
+if [ "$STATUS" -eq 0 ]; then
+    echo
+    echo "Extracted sequence artifact:"
+    qiime tools peek \
+      10_greengenes_test/reference/gg2_2022_10_338F_806R.qza
+
+    echo
+    echo "Extraction statistics artifact:"
+    qiime tools peek \
+      10_greengenes_test/reference/gg2_2022_10_338F_806R_stats.qza
+fi
+
+echo
+echo "Finished:"
+date
+echo "========================================"
+
+exit $STATUS

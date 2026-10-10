@@ -1,0 +1,123 @@
+#!/bin/bash
+
+#PBS -N rescue_8
+#PBS -q serial
+#PBS -l select=1:ncpus=1:mem=2gb
+#PBS -j oe
+
+set -euo pipefail
+
+RUN="/hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903"
+PATCH="$RUN/software/ngspeciesid_min2_continue"
+
+MANIFEST="$RUN/manifests/min2_racon_rescue_8.txt"
+INPUT_DIR="$RUN/inputs/03b_length_filtered_fastq"
+
+OUTBASE="$RUN/03_ngspeciesid_racon/min2_rescue"
+SUMMARY="$OUTBASE/rescue_summary.tsv"
+
+mkdir -p "$OUTBASE/samples"
+
+module purge
+unset PYTHONPATH
+module load miniconda/4.12
+source "$(conda info --base)/etc/profile.d/conda.sh"
+conda activate /hpctmp/e0958567/conda_envs/ngspeciesid-0.3.1
+
+export PYTHONPATH="$PATCH"
+export LC_ALL=C
+export LANG=C
+export PATH="$HOME/bin:$PATH"
+
+echo "===== PATCHED MODULE ====="
+python - <<'PY'
+import modules.consensus
+print(modules.consensus.__file__)
+PY
+
+printf \
+"sample_id\tinput_reads\tfinal_racon_consensuses\tskipped_racon_clusters\tskipped_supporting_reads\tstatus\n" \
+> "$SUMMARY"
+
+while IFS= read -r SAMPLE
+do
+    [[ -n "$SAMPLE" ]] || continue
+
+    INPUT="$INPUT_DIR/${SAMPLE}_filtered.fastq"
+    OUT="$OUTBASE/samples/$SAMPLE"
+
+    N=$(seqkit stats -T "$INPUT" | awk 'NR==2 {print $4}')
+
+    AR=$(awk -v n="$N" 'BEGIN {printf "%.15f", 2.5/n}')
+
+    echo
+    echo "=============================================="
+    echo "$SAMPLE"
+    echo "Input reads: $N"
+    echo "Effective cutoff: 2"
+    echo "=============================================="
+
+    rm -rf "$OUT"
+    mkdir -p "$OUT"
+
+    set +e
+
+    NGSpeciesID \
+      --ont \
+      --fastq "$INPUT" \
+      --outfolder "$OUT" \
+      --consensus \
+      --abundance_ratio "$AR" \
+      --racon \
+      --racon_iter 3 \
+      --t 1
+
+    EXIT=$?
+
+    set -e
+
+    CONS=$(find "$OUT" \
+      -type f \
+      -path '*/racon_cl_id_*/racon_polished_it_2.fasta' \
+      -size +0c | wc -l)
+
+    SKIP_N=0
+    SKIP_READS=0
+
+    if [[ -s "$OUT/racon_failed_clusters.tsv" ]]; then
+        SKIP_N=$(awk 'NR>1 {n++} END {print n+0}' \
+          "$OUT/racon_failed_clusters.tsv")
+
+        SKIP_READS=$(awk -F'\t' 'NR>1 {s+=$2} END {print s+0}' \
+          "$OUT/racon_failed_clusters.tsv")
+    fi
+
+    if [[ "$EXIT" -eq 0 ]]; then
+        STATUS="SUCCESS"
+    else
+        STATUS="FAILED"
+    fi
+
+    printf "%s\t%s\t%s\t%s\t%s\t%s\n" \
+      "$SAMPLE" \
+      "$N" \
+      "$CONS" \
+      "$SKIP_N" \
+      "$SKIP_READS" \
+      "$STATUS" \
+      >> "$SUMMARY"
+
+done < "$MANIFEST"
+
+echo
+echo "===== FINAL RESCUE SUMMARY ====="
+column -t -s $'\t' "$SUMMARY"
+
+echo
+echo -n "Successful rescues: "
+awk -F'\t' 'NR>1 && $6=="SUCCESS" {n++} END {print n+0}' "$SUMMARY"
+
+echo -n "Failed rescues: "
+awk -F'\t' 'NR>1 && $6!="SUCCESS" {n++} END {print n+0}' "$SUMMARY"
+
+echo "Completed: $(date -Is)"

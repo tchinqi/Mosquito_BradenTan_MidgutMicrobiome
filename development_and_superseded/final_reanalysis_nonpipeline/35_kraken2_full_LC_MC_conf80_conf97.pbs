@@ -1,0 +1,95 @@
+#!/bin/bash
+#PBS -N Kraken_conf8097
+#PBS -q serial
+#PBS -l select=1:ncpus=1:mem=10gb
+#PBS -l walltime=01:00:00
+#PBS -j oe
+
+set -euo pipefail
+
+RUN="/hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903"
+DB="/hpctmp/e0958567/kraken2_db/k2_standard_08gb_20230605"
+KRAKEN="/hpctmp/e0958567/conda_envs/kraken2/bin/kraken2"
+
+LC="$RUN/04_global_vsearch97/postracon_thresholds_576/vsearch97/0p1pct/otu97_centroids_UPPERCASE.fasta"
+MC="$RUN/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/vsearch97/otu97_centroids_UPPERCASE.fasta"
+
+OUT="$RUN/06_taxonomy/kraken2_confidence_80_97"
+mkdir -p "$OUT"
+
+echo "============================================================"
+echo "Kraken2 full LC/MC comparison"
+echo "Confidence thresholds: 0.80 and 0.97"
+echo "============================================================"
+echo
+"$KRAKEN" --version
+echo
+
+
+run_kraken () {
+
+    DATASET="$1"
+    FASTA="$2"
+    CONF="$3"
+    LABEL="$4"
+    EXPECTED="$5"
+
+    echo
+    echo "============================================================"
+    echo "$DATASET - Kraken confidence $CONF"
+    echo "============================================================"
+
+    "$KRAKEN" \
+        --db "$DB" \
+        --threads 1 \
+        --confidence "$CONF" \
+        --use-names \
+        --report "$OUT/${DATASET}_confidence_${LABEL}.report" \
+        --output "$OUT/${DATASET}_confidence_${LABEL}.kraken.tsv" \
+        "$FASTA"
+
+    FILE="$OUT/${DATASET}_confidence_${LABEL}.kraken.tsv"
+
+    TOTAL=$(awk 'END{print NR}' "$FILE")
+    CLASSIFIED=$(awk -F'\t' '$1=="C"{n++} END{print n+0}' "$FILE")
+    UNCLASSIFIED=$(awk -F'\t' '$1=="U"{n++} END{print n+0}' "$FILE")
+
+    echo
+    echo "$DATASET confidence $CONF"
+    echo "Total OTUs:        $TOTAL"
+    echo "Classified:        $CLASSIFIED"
+    echo "Unclassified:      $UNCLASSIFIED"
+    echo "Accounting:        $((CLASSIFIED + UNCLASSIFIED)) / $TOTAL"
+
+    if [ "$TOTAL" -ne "$EXPECTED" ]; then
+        echo "ERROR: expected $EXPECTED OTUs but found $TOTAL"
+        exit 1
+    fi
+
+    if [ $((CLASSIFIED + UNCLASSIFIED)) -ne "$TOTAL" ]; then
+        echo "ERROR: accounting failed"
+        exit 1
+    fi
+
+    echo "PASS"
+}
+
+
+# LC = 7,642 OTUs
+run_kraken "LC" "$LC" "0.80" "0p80" 7642
+run_kraken "LC" "$LC" "0.97" "0p97" 7642
+
+# MC = 867 OTUs
+run_kraken "MC" "$MC" "0.80" "0p80" 867
+run_kraken "MC" "$MC" "0.97" "0p97" 867
+
+
+echo
+echo "============================================================"
+echo "ALL KRAKEN CONFIDENCE RUNS COMPLETE"
+echo "============================================================"
+
+echo
+echo "Output directory:"
+echo "$OUT"
+

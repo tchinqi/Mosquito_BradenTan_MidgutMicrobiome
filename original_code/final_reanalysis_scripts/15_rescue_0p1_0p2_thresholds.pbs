@@ -1,0 +1,155 @@
+#!/bin/bash
+#PBS -q serial
+#PBS -l select=1:ncpus=1:mem=2gb
+#PBS -j oe
+
+set -euo pipefail
+
+module purge
+unset PYTHONPATH
+module load miniconda/4.12
+source "$(conda info --base)/etc/profile.d/conda.sh"
+conda activate /hpctmp/e0958567/conda_envs/ngspeciesid-0.3.1
+
+export LC_ALL=C
+export LANG=C
+export PATH="$HOME/bin:$PATH"
+
+RUN="/hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903"
+INPUT_DIR="$RUN/inputs/03b_length_filtered_fastq"
+PLAN="$RUN/02_abundance_ratio/threshold_plan.tsv"
+
+# Patched COPY of NGSpeciesID module:
+# continue processing the sample if one individual Racon cluster fails.
+# Installed NGSpeciesID package itself is NOT modified.
+PATCH="$RUN/software/ngspeciesid_min2_continue"
+export PYTHONPATH="$PATCH"
+
+echo "===== THRESHOLD RESCUE ====="
+echo "Date: $(date)"
+echo "Host: $(hostname)"
+echo "NGSpeciesID: $(NGSpeciesID --version 2>&1 | head -1)"
+echo "Patched module location:"
+python - <<'PY'
+import modules.consensus
+print(modules.consensus.__file__)
+PY
+echo
+
+for TEST in 0p1pct 0p2pct
+do
+    MANIFEST="$RUN/manifests/${TEST}_midgut_rescue.txt"
+    OUTBASE="$RUN/03_ngspeciesid_racon/${TEST}_rescue"
+    SUMMARY="$OUTBASE/rescue_summary.tsv"
+
+    mkdir -p "$OUTBASE/samples"
+
+    printf \
+"sample_id\ttest\tinput_reads\teffective_cutoff_reads\tabundance_ratio\tfinal_racon_consensuses\tskipped_racon_clusters\tskipped_supporting_reads\tstatus\n" \
+    > "$SUMMARY"
+
+    while IFS= read -r SAMPLE
+    do
+        [[ -n "$SAMPLE" ]] || continue
+
+        INPUT="$INPUT_DIR/${SAMPLE}_filtered.fastq"
+        OUT="$OUTBASE/samples/$SAMPLE"
+
+        N=$(seqkit stats -T "$INPUT" | awk 'NR==2 {print $4}')
+
+        CUTOFF=$(awk -F'\t' -v s="$SAMPLE" -v t="$TEST" '
+            NR==1 {
+                if(t=="0p1pct") col=4
+                else if(t=="0p2pct") col=5
+                next
+            }
+            $1==s {print $col; exit}
+        ' "$PLAN")
+
+        if [[ -z "$CUTOFF" ]]; then
+            echo "ERROR: missing cutoff for $SAMPLE / $TEST"
+            exit 1
+        fi
+
+        # Preserve exact logic used in the original threshold run:
+        # NGSpeciesID uses int(abundance_ratio * N)
+        AR=$(awk -v k="$CUTOFF" -v n="$N" \
+            'BEGIN {printf "%.15f", (k+0.5)/n}')
+
+        CHECK=$(awk -v ar="$AR" -v n="$N" \
+            'BEGIN {print int(ar*n)}')
+
+        if [[ "$CHECK" -ne "$CUTOFF" ]]; then
+            echo "ERROR: cutoff calculation failed for $SAMPLE / $TEST"
+            exit 1
+        fi
+
+        echo
+        echo "=============================================="
+        echo "Sample: $SAMPLE"
+        echo "Condition: $TEST"
+        echo "Input 350-550 reads: $N"
+        echo "Effective cutoff: $CUTOFF"
+        echo "abundance_ratio: $AR"
+        echo "=============================================="
+
+        rm -rf "$OUT"
+        mkdir -p "$OUT"
+
+        set +e
+        NGSpeciesID \
+            --ont \
+            --fastq "$INPUT" \
+            --outfolder "$OUT" \
+            --consensus \
+            --abundance_ratio "$AR" \
+            --racon \
+            --racon_iter 3 \
+            --t 1
+        EXIT=$?
+        set -e
+
+        CONS=$(find "$OUT" \
+            -type f \
+            -path '*/racon_cl_id_*/racon_polished_it_2.fasta' \
+            -size +0c | wc -l)
+
+        SKIP_N=0
+        SKIP_READS=0
+
+        if [[ -s "$OUT/racon_failed_clusters.tsv" ]]; then
+            SKIP_N=$(awk 'NR>1 {n++} END {print n+0}' \
+                "$OUT/racon_failed_clusters.tsv")
+
+            SKIP_READS=$(awk -F'\t' 'NR>1 {s+=$2} END {print s+0}' \
+                "$OUT/racon_failed_clusters.tsv")
+        fi
+
+        if [[ "$EXIT" -eq 0 ]]; then
+            STATUS="SUCCESS"
+        else
+            STATUS="FAILED"
+        fi
+
+        printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" \
+            "$SAMPLE" \
+            "$TEST" \
+            "$N" \
+            "$CUTOFF" \
+            "$AR" \
+            "$CONS" \
+            "$SKIP_N" \
+            "$SKIP_READS" \
+            "$STATUS" \
+            >> "$SUMMARY"
+
+    done < "$MANIFEST"
+
+    echo
+    echo "===== $TEST RESCUE SUMMARY ====="
+    column -t -s $'\t' "$SUMMARY"
+    echo
+done
+
+echo "===== ALL THRESHOLD RESCUES COMPLETE ====="
+echo "Finished: $(date)"

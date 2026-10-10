@@ -1,0 +1,169 @@
+#!/bin/bash
+#PBS -N kraken_GG80_rescue
+#PBS -q serial
+#PBS -l select=1:ncpus=1:mem=10gb
+#PBS -l walltime=04:00:00
+#PBS -j oe
+
+set -euo pipefail
+
+RUN="/hpctmp/e0958567/Braden_16S_20260819/20_FINAL_reanalysis_20260903"
+
+KRAKEN="/hpctmp/e0958567/conda_envs/kraken2/bin/kraken2"
+
+DB="/hpctmp/e0958567/kraken2_db/k2_standard_08gb_20230605"
+
+INDIR="$RUN/06_taxonomy/kraken2_final/FINAL_GG80_unassigned_domain_rescue"
+
+OUTDIR="$INDIR/kraken_default_vs_conf097"
+
+mkdir -p "$OUTDIR"
+
+LC="$INDIR/LC_GG80_Unassigned_plus_domain_only.fasta"
+MC="$INDIR/MC_GG80_Unassigned_plus_domain_only.fasta"
+
+
+echo "============================================================"
+echo "FINAL GG80 UNASSIGNED + DOMAIN-ONLY KRAKEN RESCUE"
+echo "============================================================"
+echo
+echo "Kraken version:"
+"$KRAKEN" --version
+echo
+echo "Database:"
+echo "$DB"
+echo
+echo "LC FASTA: $LC"
+echo "MC FASTA: $MC"
+echo
+
+
+# ============================================================
+# LC — Kraken default confidence (0.0)
+# ============================================================
+
+echo "============================================================"
+echo "LC — KRAKEN DEFAULT CONFIDENCE 0.0"
+echo "============================================================"
+
+"$KRAKEN" \
+    --db "$DB" \
+    --threads 1 \
+    --use-names \
+    --report "$OUTDIR/LC_GG80_rescue_default.report" \
+    --output "$OUTDIR/LC_GG80_rescue_default.kraken.tsv" \
+    "$LC"
+
+
+# ============================================================
+# LC — Kraken confidence 0.97
+# ============================================================
+
+echo "============================================================"
+echo "LC — KRAKEN CONFIDENCE 0.97"
+echo "============================================================"
+
+"$KRAKEN" \
+    --db "$DB" \
+    --threads 1 \
+    --confidence 0.97 \
+    --use-names \
+    --report "$OUTDIR/LC_GG80_rescue_conf097.report" \
+    --output "$OUTDIR/LC_GG80_rescue_conf097.kraken.tsv" \
+    "$LC"
+
+
+# ============================================================
+# MC — Kraken default confidence (0.0)
+# ============================================================
+
+echo "============================================================"
+echo "MC — KRAKEN DEFAULT CONFIDENCE 0.0"
+echo "============================================================"
+
+"$KRAKEN" \
+    --db "$DB" \
+    --threads 1 \
+    --use-names \
+    --report "$OUTDIR/MC_GG80_rescue_default.report" \
+    --output "$OUTDIR/MC_GG80_rescue_default.kraken.tsv" \
+    "$MC"
+
+
+# ============================================================
+# MC — Kraken confidence 0.97
+# ============================================================
+
+echo "============================================================"
+echo "MC — KRAKEN CONFIDENCE 0.97"
+echo "============================================================"
+
+"$KRAKEN" \
+    --db "$DB" \
+    --threads 1 \
+    --confidence 0.97 \
+    --use-names \
+    --report "$OUTDIR/MC_GG80_rescue_conf097.report" \
+    --output "$OUTDIR/MC_GG80_rescue_conf097.kraken.tsv" \
+    "$MC"
+
+
+# ============================================================
+# VALIDATION / SUMMARY
+# ============================================================
+
+echo
+echo "============================================================"
+echo "FINAL COUNTS"
+echo "============================================================"
+
+for DATASET in LC MC
+do
+
+    if [ "$DATASET" = "LC" ]; then
+        EXPECTED=4884
+    else
+        EXPECTED=188
+    fi
+
+    echo
+    echo "------------------------------"
+    echo "$DATASET"
+    echo "------------------------------"
+
+    for MODE in default conf097
+    do
+
+        FILE="$OUTDIR/${DATASET}_GG80_rescue_${MODE}.kraken.tsv"
+
+        TOTAL=$(wc -l < "$FILE")
+        CLASSIFIED=$(awk -F'\t' '$1=="C"{n++} END{print n+0}' "$FILE")
+        UNCLASSIFIED=$(awk -F'\t' '$1=="U"{n++} END{print n+0}' "$FILE")
+
+        echo
+        echo "$MODE"
+        echo "Input OTUs:       $TOTAL"
+        echo "Classified:       $CLASSIFIED"
+        echo "Unclassified:     $UNCLASSIFIED"
+
+        if [ "$TOTAL" -eq "$EXPECTED" ] && \
+           [ $((CLASSIFIED + UNCLASSIFIED)) -eq "$EXPECTED" ]; then
+            echo "Accounting:       PASS"
+        else
+            echo "Accounting:       FAIL"
+            exit 1
+        fi
+
+    done
+
+done
+
+
+echo
+echo "============================================================"
+echo "FINAL KRAKEN RESCUE RUN COMPLETE"
+echo "============================================================"
+echo
+echo "Output directory:"
+echo "$OUTDIR"
+echo

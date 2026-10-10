@@ -1,0 +1,45 @@
+#PBS -q serial
+#PBS -l select=1:ncpus=1:mem=4gb
+#PBS -j oe
+#PBS -N Braden_length_filter
+
+cd "$PBS_O_WORKDIR" || exit 1
+
+SEQKIT="$HOME/bin/seqkit"
+INPUT="03_no_gaps_fastq"
+OUTPUT="03b_length_filtered_fastq"
+
+mkdir -p "$OUTPUT"
+
+echo "========================================"
+echo "Length filtering 16S reads: 350-550 bp"
+date
+echo "========================================"
+
+count=0
+
+for f in "$INPUT"/*.fastq; do
+    base=$(basename "$f" .fastq)
+
+    "$SEQKIT" seq -g -m 350 -M 550 "$f" \
+        > "$OUTPUT/${base}_filtered.fastq"
+
+    count=$((count + 1))
+done
+
+echo
+echo "Files processed: $count"
+
+echo "Output files:"
+find "$OUTPUT" -maxdepth 1 -name '*_filtered.fastq' | wc -l
+
+echo
+echo "Generating SeqKit statistics..."
+
+"$SEQKIT" stats -a -T "$OUTPUT"/*_filtered.fastq \
+    > "${OUTPUT}_stats.tsv"
+
+echo
+echo "Finished:"
+date
+echo "========================================"

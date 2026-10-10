@@ -1,0 +1,189 @@
+OTU	category	reads	samples	sciname	taxid	pident	qcov	possible_chimera	align_len	qlen	evalue	bitscore	accession	title
+OTU_75	No hit	18989.0	81											
+OTU_27	Bacteria (>=97% identity)	15600.0	5	Elizabethkingia meningoseptica	238	99.3	78.8		429	543	0	774.866	CP144302	Elizabethkingia meningoseptica strain EM1 chromosome, complete genome
+OTU_831	No hit	7186.0	16											
+OTU_12	Bacteria (>=97% identity)	5281.0	10	uncultured Wolbachia sp.	244204	99.06	76.4		426	556	0	761.94	MT588711	Uncultured Wolbachia sp. clone FJAAL1 16S ribosomal RNA gene, partial sequence
+OTU_327	No hit	2283.0	43											
+OTU_260	Mosquito (Culicidae)	2218.0	22	Aedes albopictus	7160	98.36	95.1		426	447	0	747.167	XM_062851144	PREDICTED: Aedes albopictus insulin receptor substrate 1-B (LOC109411294), transcript variant X6, mRNA
+OTU_657	No hit	2154.0	3											
+OTU_857	No hit	1895.0	12											
+OTU_6	Bacteria (>=97% identity)	1721.0	11	uncultured Sphingomonas sp.	158754	98.06	71.4		413	577	0	717.62	KX959671	Uncultured Sphingomonas sp. clone B3-16 16S ribosomal RNA gene, partial sequence
+OTU_353	No hit	1663.0	2											
+OTU_20	Bacteria (>=97% identity)	1549.0	6	Elizabethkingia anophelis	1117645	99.53	77.7		427	548	0	776.713	CP069277	Elizabethkingia anophelis strain SEA01 chromosome, complete genome
+OTU_659	Mosquito (Culicidae)	1414.0	13	Aedes albopictus	7160	98.78	97.6		410	419	0	728.7	XM_019689561	PREDICTED: Aedes albopictus GATA zinc finger domain-containing protein 7 (LOC109415653), mRNA
+OTU_76	Mosquito (Culicidae)	1379.0	15	Aedes albopictus	7160	82.22	26.3	yes	135	494	1.00864e-19	111.919	XM_062857139	PREDICTED: Aedes albopictus uncharacterized LOC109429525 (LOC109429525), transcript variant X2, mRNA
+OTU_358	Mosquito (Culicidae)	1256.0	17	Aedes albopictus	7160	98.35	96.8		423	437	0	743.473	XM_062843397	PREDICTED: Aedes albopictus calponin homology domain-containing protein DDB_G0272472 (LOC109426865), transcript variant X2, mRNA
+OTU_201	Mosquito (Culicidae)	947.0	14	Aedes albopictus	7160	97.86	92.1		421	457	0	728.7	XM_062851144	PREDICTED: Aedes albopictus insulin receptor substrate 1-B (LOC109411294), transcript variant X6, mRNA
+OTU_362	No hit	857.0	23											
+OTU_840	No hit	757.0	17											
+OTU_107	Mosquito (Culicidae)	726.0	9	Aedes albopictus	7160	97.07	99.8		478	475	0	802.566	XM_062856454	PREDICTED: Aedes albopictus protein AF-10 (LOC109398831), transcript variant X10, mRNA
+OTU_807	No hit	713.0	3											
+OTU_415	Mosquito (Culicidae)	673.0	6	Aedes albopictus	7160	98.07	95.2		414	434	0	719.467	XM_062843397	PREDICTED: Aedes albopictus calponin homology domain-containing protein DDB_G0272472 (LOC109426865), transcript variant X2, mRNA
+OTU_264	Mosquito (Culicidae)	618.0	13	Aedes albopictus	7160	98.81	94.4		421	446	0	750.86	XM_062851144	PREDICTED: Aedes albopictus insulin receptor substrate 1-B (LOC109411294), transcript variant X6, mRNA
+OTU_824	Mosquito (Culicidae)	614.0	1	Aedes albopictus	7160	81.01	98.5		395	399	7.34361e-80	311.357	XM_062849466	PREDICTED: Aedes albopictus lysosomal alpha-mannosidase-like (LOC115268591), mRNA
+OTU_627	Virus	587.0	7	Mampikony meta-like virus	3783044	93.66	33.6	yes	142	422	8.14751e-50	211.638	PZ763361	MAG: Mampikony meta-like virus isolate MAD1789 sequence
+OTU_174	No hit	585.0	13											
+OTU_3	Mosquito (Culicidae)	579.0	13	Aedes albopictus	7160	99.22	99.7		641	642	0	1153.43	PV067938	Aedes albopictus isolate S63 small subunit ribosomal RNA gene, partial sequence
+OTU_52	Mosquito (Culicidae)	575.0	6	Aedes albopictus	7160	96.24	98.2		505	506	0	817.339	XM_019691860	PREDICTED: Aedes albopictus CCHC-type zinc finger nucleic acid binding protein (LOC109417743), transcript variant X1, mRNA
+OTU_18	No hit	542.0	4											
+OTU_397	Mosquito (Culicidae)	519.0	6	Aedes albopictus	7160	99.28	95.6		417	435	0	752.707	XM_062851144	PREDICTED: Aedes albopictus insulin receptor substrate 1-B (LOC109411294), transcript variant X6, mRNA
+OTU_64	Mosquito (Culicidae)	463.0	8	Culex pipiens pallens	42434	99.4	99.8		497	497	0	900.439	XM_039595605	PREDICTED: Culex pipiens pallens uncharacterized protein K02A2.6-like (LOC120430510), mRNA
+OTU_437	Mosquito (Culicidae)	455.0	3	Aedes albopictus	7160	97.78	93.5		406	433	0	697.307	XM_062851144	PREDICTED: Aedes albopictus insulin receptor substrate 1-B (LOC109411294), transcript variant X6, mRNA
+OTU_585	No hit	429.0	9											
+OTU_4	Bacteria (>=97% identity)	407.0	2	Elizabethkingia anophelis	1117645	99.76	99.7		419	611	0	767.48	CP069277	Elizabethkingia anophelis strain SEA01 chromosome, complete genome
+OTU_154	No hit	402.0	5											
+OTU_832	Mosquito (Culicidae)	392.0	2	Aedes albopictus	7160	96.12	90.9		361	396	3.00445e-163	588.355	XM_062856454	PREDICTED: Aedes albopictus protein AF-10 (LOC109398831), transcript variant X10, mRNA
+OTU_445	No hit	391.0	3											
+OTU_853	No hit	334.0	2											
+OTU_34	Mosquito (Culicidae)	333.0	5	Aedes albopictus	7160	95.52	75.6		402	532	8.71036e-180	643.754	XM_029862557	PREDICTED: Aedes albopictus hemicentin-1-like (LOC109406152), transcript variant X2, mRNA
+OTU_99	Mosquito (Culicidae)	317.0	4	Aedes albopictus	7160	98.12	99.8		480	479	0	835.806	XM_062852661	PREDICTED: Aedes albopictus cyclin-dependent kinase 14-like (LOC115263181), transcript variant X2, mRNA
+OTU_117	Mosquito (Culicidae)	295.0	8	Aedes albopictus	7160	99.58	99.4		472	473	0	859.812	XM_062856404	PREDICTED: Aedes albopictus uncharacterized LOC134289824 (LOC134289824), mRNA
+OTU_37	Mosquito (Culicidae)	294.0	6	Aedes albopictus	7160	98.09	98.3		524	527	0	907.825	XM_019691860	PREDICTED: Aedes albopictus CCHC-type zinc finger nucleic acid binding protein (LOC109417743), transcript variant X1, mRNA
+OTU_860	Mosquito (Culicidae)	282.0	5	Aedes albopictus	7160	98.9	99.7		362	362	1.59175e-180	645.601	XM_062856454	PREDICTED: Aedes albopictus protein AF-10 (LOC109398831), transcript variant X10, mRNA
+OTU_78	No hit	278.0	4											
+OTU_74	No hit	277.0	7											
+OTU_639	Mosquito (Culicidae)	257.0	4	Aedes albopictus	7160	98.09	99.5		419	421	0	728.7	XM_019681013	PREDICTED: Aedes albopictus pupal cuticle protein 36a (LOC109407851), mRNA
+OTU_576	Virus	240.0	5	Mampikony meta-like virus	3783044	91.55	33.3	yes	142	426	8.29039e-45	195.019	PZ763361	MAG: Mampikony meta-like virus isolate MAD1789 sequence
+OTU_122	No hit	230.0	3											
+OTU_134	No hit	227.0	6											
+OTU_2	Mosquito (Culicidae)	224.0	4	Aedes albopictus	7160	96.9	99.5		645	646	0	1072.18	PV067938	Aedes albopictus isolate S63 small subunit ribosomal RNA gene, partial sequence
+OTU_39	Mosquito (Culicidae)	222.0	6	Aedes albopictus	7160	97.12	39.5	yes	208	526	5.84072e-92	351.984	XR_009998073	PREDICTED: Aedes albopictus uncharacterized LOC134288636 (LOC134288636), ncRNA
+OTU_136	Mosquito (Culicidae)	221.0	2	Aedes albopictus	7160	97.42	98.9		465	469	0	791.486	XM_062856454	PREDICTED: Aedes albopictus protein AF-10 (LOC109398831), transcript variant X10, mRNA
+OTU_195	No hit	210.0	2											
+OTU_77	Mosquito (Culicidae)	196.0	1	Aedes albopictus	7160	82.22	26.5	yes	135	494	2.80441e-20	113.766	XM_062857139	PREDICTED: Aedes albopictus uncharacterized LOC109429525 (LOC109429525), transcript variant X2, mRNA
+OTU_43	Mosquito (Culicidae)	190.0	3	Culex quinquefasciatus	7176	99.81	99.4		515	518	0	946.605	XM_038266207	Culex quinquefasciatus LOW QUALITY PROTEIN: keratin, type I cytoskeletal 9-like (LOC119770758), mRNA
+OTU_844	Mosquito (Culicidae)	182.0	6	Aedes albopictus	7160	98.9	95.8		365	381	0	651.141	XM_062854829	PREDICTED: Aedes albopictus uncharacterized LOC134288898 (LOC134288898), mRNA
+OTU_31	No hit	175.0	6											
+OTU_630	No hit	162.0	3											
+OTU_715	No hit	146.0	3											
+OTU_1	Mosquito (Culicidae)	143.0	5	Aedes albopictus	7160	99.68	93.7		625	665	0	1142.35	PV067938	Aedes albopictus isolate S63 small subunit ribosomal RNA gene, partial sequence
+OTU_459	No hit	141.0	1											
+OTU_635	Mosquito (Culicidae)	137.0	4	Aedes aegypti	7159	91.34	84.8		358	422	9.34518e-134	490.482	XM_021839212	PREDICTED: Aedes aegypti CREB-binding protein (LOC23687811), transcript variant X2, mRNA
+OTU_842	No hit	131.0	2											
+OTU_843	No hit	127.0	1											
+OTU_25	No hit	121.0	2											
+OTU_846	No hit	121.0	2											
+OTU_674	Mosquito (Culicidae)	115.0	2	Aedes albopictus	7160	96.39	98.8		415	417	0	678.841	XM_062856454	PREDICTED: Aedes albopictus protein AF-10 (LOC109398831), transcript variant X10, mRNA
+OTU_16	Mosquito (Culicidae)	114.0	3	Aedes albopictus	7160	97.64	99.3		550	553	0	942.912	XM_029855519	PREDICTED: Aedes albopictus molybdenum cofactor sulfurase 2 (LOC115256654), mRNA
+OTU_837	No hit	114.0	3											
+OTU_176	No hit	112.0	1											
+OTU_7	Bacteria (>=97% identity)	111.0	2	Sphingomonas benefaciens	3457787	98.75	99.8		399	576	0	708.387	PX148844	Sphingomonas benefaciens strain XXL09 16S ribosomal RNA gene, complete sequence
+OTU_825	Mosquito (Culicidae)	111.0	4	Aedes albopictus	7160	82.23	96.7		394	399	5.63694e-86	331.671	XM_062850205	PREDICTED: Aedes albopictus uncharacterized LOC134287695 (LOC134287695), mRNA
+OTU_867	Mosquito (Culicidae)	109.0	2	Aedes albopictus	7160	92.59	30.6	yes	108	353	1.14367e-32	154.392	XM_062854544	PREDICTED: Aedes albopictus protein draper (LOC109409735), transcript variant X3, mRNA
+OTU_495	No hit	102.0	1											
+OTU_676	Mosquito (Culicidae)	101.0	3	Aedes albopictus	7160	98.8	19.9	yes	83	417	6.39527e-31	148.852	XM_062853386	PREDICTED: Aedes albopictus phosphatidylinositol 3-kinase regulatory subunit alpha (LOC109409609), transcript variant X7, mRNA
+OTU_28	No hit	98.0	1											
+OTU_63	Mosquito (Culicidae)	98.0	2	Aedes albopictus	7160	96.45	39.4	yes	197	498	1.20051e-83	324.284	XM_062854941	PREDICTED: Aedes albopictus uncharacterized protein K02A2.6-like (LOC134288986), transcript variant X2, mRNA
+OTU_679	Virus	98.0	1	Mampikony meta-like virus	3783044	93.66	34.1	yes	142	416	8.02087e-50	211.638	PZ763361	MAG: Mampikony meta-like virus isolate MAD1789 sequence
+OTU_700	No hit	96.0	1											
+OTU_10	No hit	94.0	3											
+OTU_95	Mosquito (Culicidae)	93.0	1	Aedes albopictus	7160	97.71	99.8		481	481	0	824.726	XM_062852661	PREDICTED: Aedes albopictus cyclin-dependent kinase 14-like (LOC115263181), transcript variant X2, mRNA
+OTU_131	Mosquito (Culicidae)	92.0	2	Aedes albopictus	7160	92.77	17.4	yes	83	471	5.72498e-22	119.306	XM_062853386	PREDICTED: Aedes albopictus phosphatidylinositol 3-kinase regulatory subunit alpha (LOC109409609), transcript variant X7, mRNA
+OTU_839	No hit	92.0	2											
+OTU_137	Mosquito (Culicidae)	91.0	3	Aedes albopictus	7160	97.91	51.0	yes	239	469	6.49027e-111	414.77	XM_019694163	PREDICTED: Aedes albopictus deoxyribose-phosphate aldolase (LOC109419878), mRNA
+OTU_96	Mosquito (Culicidae)	90.0	3	Aedes albopictus	7160	98.96	99.8		481	481	0	859.812	XM_062858648	PREDICTED: Aedes albopictus uncharacterized protein K02A2.6-like (LOC134291193), mRNA
+OTU_845	Mosquito (Culicidae)	89.0	1	Aedes albopictus	7160	86.7	52.2	yes	203	381	1.20996e-52	220.872	XM_029855507	PREDICTED: Aedes albopictus guanylate cyclase 32E (LOC109433032), transcript variant X1, mRNA
+OTU_833	Mosquito (Culicidae)	88.0	2	Aedes albopictus	7160	94.55	51.1	yes	202	395	2.61213e-79	309.511	XM_062852262	PREDICTED: Aedes albopictus uncharacterized protein K02A2.6-like (LOC134288204), transcript variant X2, mRNA
+OTU_456	Mosquito (Culicidae)	85.0	3	Aedes albopictus	7160	96.99	76.9		332	432	2.59125e-154	558.808	XM_062853300	PREDICTED: Aedes albopictus UDP-N-acetylglucosamine--peptide N-acetylglucosaminyltransferase 110 kDa subunit (LOC134288434), mRNA
+OTU_29	No hit	82.0	2											
+OTU_629	Mosquito (Culicidae)	73.0	2	Aedes albopictus	7160	91.82	90.0		391	422	4.25658e-147	534.802	XM_019685120	PREDICTED: Aedes albopictus uncharacterized LOC109411574 (LOC109411574), mRNA
+OTU_750	No hit	73.0	2											
+OTU_5	Bacteria (>=97% identity)	70.0	1	uncultured Sphingomonas sp.	158754	99.23	99.8		389	592	0	701.001	PZ096601	Uncultured Sphingomonas sp. clone G001_32 16S ribosomal RNA gene, partial sequence
+OTU_83	No hit	70.0	2											
+OTU_838	No hit	65.0	1											
+OTU_538	Mosquito (Culicidae)	62.0	1	Aedes albopictus	7160	90.65	99.8		428	428	1.53289e-156	566.195	XR_009995780	PREDICTED: Aedes albopictus uncharacterized LOC134284454 (LOC134284454), transcript variant X1, ncRNA
+OTU_726	Mosquito (Culicidae)	62.0	2	Aedes albopictus	7160	86.7	99.5		421	411	3.33538e-118	438.776	XM_062848898	PREDICTED: Aedes albopictus uncharacterized LOC134287222 (LOC134287222), mRNA
+OTU_398	No hit	61.0	2											
+OTU_829	Mosquito (Culicidae)	61.0	1	Anopheles coluzzii	1518534	88.0	83.1		200	397	1.25715e-57	237.491	XM_040381437	PREDICTED: Anopheles coluzzii uncharacterized LOC120958555 (LOC120958555), transcript variant X1, mRNA
+OTU_863	Mosquito (Culicidae)	61.0	1	Aedes albopictus	7160	96.37	100.0		358	358	7.47174e-164	590.202	XM_062856454	PREDICTED: Aedes albopictus protein AF-10 (LOC109398831), transcript variant X10, mRNA
+OTU_633	No hit	58.0	2											
+OTU_148	No hit	57.0	1											
+OTU_861	No hit	54.0	1											
+OTU_226	Mosquito (Culicidae)	53.0	1	Aedes albopictus	7160	98.79	36.5	yes	165	452	8.47557e-75	294.738	XR_009997638	PREDICTED: Aedes albopictus uncharacterized LOC134287917 (LOC134287917), ncRNA
+OTU_212	No hit	52.0	2											
+OTU_725	Mosquito (Culicidae)	52.0	1	Aedes albopictus	7160	98.57	17.0	yes	70	411	1.06078e-23	124.846	XM_062853386	PREDICTED: Aedes albopictus phosphatidylinositol 3-kinase regulatory subunit alpha (LOC109409609), transcript variant X7, mRNA
+OTU_854	No hit	52.0	1											
+OTU_9	Bacteria (>=97% identity)	50.0	1	Brucella neotomae	29460	97.32	99.8		299	557	4.50467e-138	505.256	L26167	Brucella neotomae 16S ribosomal RNA gene
+OTU_132	Mosquito (Culicidae)	49.0	1	Aedes albopictus	7160	90.15	99.4		467	470	6.06094e-161	580.968	XM_062856412	PREDICTED: Aedes albopictus transcription factor SPT20 homolog (LOC109423383), mRNA
+OTU_684	Mosquito (Culicidae)	49.0	2	Aedes albopictus	7160	97.6	99.5		416	416	0	712.08	XM_019681013	PREDICTED: Aedes albopictus pupal cuticle protein 36a (LOC109407851), mRNA
+OTU_730	No hit	49.0	2											
+OTU_313	Mosquito (Culicidae)	48.0	1	Culex quinquefasciatus	7176	99.31	98.4		435	441	0	785.946	XM_038249142	Culex quinquefasciatus S-phase kinase-associated protein 2 transcript variant X1 (LOC6035188), mRNA
+OTU_851	No hit	47.0	1											
+OTU_133	Mosquito (Culicidae)	46.0	1	Aedes albopictus	7160	98.1	99.6		473	470	0	819.186	XM_029867451	PREDICTED: Aedes albopictus ankyrin repeat domain-containing protein 50 (LOC109423600), transcript variant X2, mRNA
+OTU_82	Mosquito (Culicidae)	46.0	1	Aedes albopictus	7160	87.6	98.8		492	487	1.38278e-147	536.649	XM_062858738	PREDICTED: Aedes albopictus innexin inx1 (LOC109404190), mRNA
+OTU_87	Mosquito (Culicidae)	45.0	2	Aedes albopictus	7160	92.18	100.0		486	484	0	660.374	XM_062857225	PREDICTED: Aedes albopictus uncharacterized LOC134290168 (LOC134290168), mRNA
+OTU_21	Mosquito (Culicidae)	44.0	1	Aedes albopictus	7160	82.42	65.9	yes	364	546	1.03175e-79	311.357	XM_062846026	PREDICTED: Aedes albopictus probable basic-leucine zipper transcription factor Q (LOC134285389), mRNA
+OTU_552	Mosquito (Culicidae)	43.0	1	Aedes albopictus	7160	97.24	100.0		434	428	0	728.7	XM_029853233	PREDICTED: Aedes albopictus uncharacterized LOC109417754 (LOC109417754), mRNA
+OTU_850	No hit	43.0	2											
+OTU_261	No hit	42.0	2											
+OTU_661	No hit	41.0	2											
+OTU_830	Mosquito (Culicidae)	41.0	1	Aedes albopictus	7160	98.21	14.1	yes	56	396	6.17239e-16	98.9927	XM_029879181	PREDICTED: Aedes albopictus mucin-3A (LOC109410775), transcript variant X2, mRNA
+OTU_26	Bacteria (>=97% identity)	40.0	1	uncultured bacterium	77133	99.01	74.0		404	543	0	723.16	JX855627	Uncultured bacterium clone Len167 16S ribosomal RNA gene, partial sequence
+OTU_866	Mosquito (Culicidae)	40.0	1	Aedes albopictus	7160	99.14	98.9		350	354	4.34771e-176	630.828	XM_062857849	PREDICTED: Aedes albopictus uncharacterized LOC134290672 (LOC134290672), mRNA
+OTU_14	Bacteria (>=97% identity)	39.0	1	Wolbachia endosymbiont (group B) of Myelois circumvoluta	3066180	99.5	71.7		399	555	0	725.007	OZ195524	Wolbachia endosymbiont (group B) of Myelois circumvoluta isolate 54653 genome assembly, chromosome: 1
+OTU_175	No hit	39.0	1											
+OTU_32	Bacteria (>=97% identity)	39.0	1	Elizabethkingia anophelis	1117645	98.65	97.0		443	534	0	784.1	PZ669165	Elizabethkingia anophelis strain CMEA01 16S ribosomal RNA gene, partial sequence
+OTU_115	Mosquito (Culicidae)	37.0	1	Aedes albopictus	7160	95.38	86.9		260	473	6.55022e-111	414.77	XM_019697565	PREDICTED: Aedes albopictus uncharacterized LOC109422703 (LOC109422703), mRNA
+OTU_147	Mosquito (Culicidae)	37.0	1	Aedes albopictus	7160	94.36	99.6		479	467	0	723.16	XM_062859021	PREDICTED: Aedes albopictus E3 ubiquitin-protein ligase TRIM33 (LOC109410890), transcript variant X7, mRNA
+OTU_660	No hit	36.0	1											
+OTU_22	No hit	35.0	1											
+OTU_249	Mosquito (Culicidae)	35.0	1	Aedes albopictus	7160	98.83	76.2		343	449	7.35613e-170	610.515	XM_062853300	PREDICTED: Aedes albopictus UDP-N-acetylglucosamine--peptide N-acetylglucosaminyltransferase 110 kDa subunit (LOC134288434), mRNA
+OTU_514	No hit	35.0	1											
+OTU_849	Mosquito (Culicidae)	35.0	1	Culex quinquefasciatus	7176	95.34	51.1	yes	193	374	3.18134e-78	305.817	XM_001843616	Culex quinquefasciatus CCHC-type zinc finger protein CG3800 (LOC6033188), mRNA
+OTU_568	Mosquito (Culicidae)	34.0	1	Aedes albopictus	7160	96.67	97.0		420	427	0	693.614	XM_062843397	PREDICTED: Aedes albopictus calponin homology domain-containing protein DDB_G0272472 (LOC109426865), transcript variant X2, mRNA
+OTU_121	No hit	33.0	1											
+OTU_518	Mosquito (Culicidae)	33.0	1	Aedes albopictus	7160	93.99	77.6		333	429	1.22212e-137	503.409	XM_029855987	PREDICTED: Aedes albopictus octopamine receptor Oamb-like (LOC109412976), transcript variant X2, mRNA
+OTU_587	No hit	33.0	1											
+OTU_67	Mosquito (Culicidae)	32.0	1	Aedes albopictus	7160	86.37	80.0		411	496	6.84637e-116	431.39	XM_019707742	PREDICTED: Aedes albopictus uncharacterized LOC109431513 (LOC109431513), mRNA
+OTU_51	No hit	30.0	1											
+OTU_632	Mosquito (Culicidae)	30.0	1	Aedes albopictus	7160	95.75	99.3		424	422	0	678.841	XM_062843397	PREDICTED: Aedes albopictus calponin homology domain-containing protein DDB_G0272472 (LOC109426865), transcript variant X2, mRNA
+OTU_835	Mosquito (Culicidae)	30.0	1	Aedes albopictus	7160	96.93	99.0		391	392	0	652.988	XM_062851144	PREDICTED: Aedes albopictus insulin receptor substrate 1-B (LOC109411294), transcript variant X6, mRNA
+OTU_856	Mosquito (Culicidae)	30.0	1	Aedes albopictus	7160	96.02	61.4	yes	226	368	3.92949e-97	368.604	XM_062855576	PREDICTED: Aedes albopictus protein unzipped (LOC109432310), transcript variant X3, mRNA
+OTU_185	Mosquito (Culicidae)	29.0	1	Aedes albopictus	7160	90.83	25.6	yes	120	461	3.29565e-34	159.932	XM_062859427	PREDICTED: Aedes albopictus zwei Ig domain protein zig-8 (LOC109426949), mRNA
+OTU_210	No hit	29.0	1											
+OTU_240	No hit	29.0	1											
+OTU_42	No hit	29.0	1											
+OTU_859	Mosquito (Culicidae)	29.0	1	Aedes albopictus	7160	94.75	100.0		362	362	7.67235e-154	556.962	XR_009998255	PREDICTED: Aedes albopictus uncharacterized LOC134289076 (LOC134289076), ncRNA
+OTU_865	Mosquito (Culicidae)	29.0	1	Aedes albopictus	7160	89.47	26.1	yes	95	356	4.21148e-22	119.306	XM_062844009	PREDICTED: Aedes albopictus uncharacterized LOC134284761 (LOC134284761), mRNA
+OTU_848	Mosquito (Culicidae)	28.0	1	Aedes albopictus	7160	84.27	65.3	yes	248	378	3.31139e-58	239.338	XM_062860176	PREDICTED: Aedes albopictus protein PFC0760c-like (LOC134291847), mRNA
+OTU_862	Mosquito (Culicidae)	28.0	1	Aedes albopictus	7160	86.99	74.9		269	358	1.41007e-76	300.278	XM_062856316	PREDICTED: Aedes albopictus uncharacterized LOC134289796 (LOC134289796), mRNA
+OTU_222	Mosquito (Culicidae)	27.0	1	Aedes albopictus	7160	93.28	52.5	yes	238	453	4.97057e-92	351.984	XM_019700410	PREDICTED: Aedes albopictus uncharacterized LOC109425163 (LOC109425163), transcript variant X6, mRNA
+OTU_383	No hit	27.0	1											
+OTU_601	Mosquito (Culicidae)	27.0	1	Aedes albopictus	7160	95.48	96.5		420	424	0	660.374	XM_062843397	PREDICTED: Aedes albopictus calponin homology domain-containing protein DDB_G0272472 (LOC109426865), transcript variant X2, mRNA
+OTU_758	No hit	27.0	1											
+OTU_864	No hit	27.0	1											
+OTU_756	Mosquito (Culicidae)	26.0	1	Aedes albopictus	7160	99.51	99.8		407	408	0	741.627	XR_009999549	PREDICTED: Aedes albopictus uncharacterized LOC134292264 (LOC134292264), transcript variant X1, misc_RNA
+OTU_777	No hit	26.0	1											
+OTU_127	Mosquito (Culicidae)	25.0	1	Aedes albopictus	7160	96.9	87.3		258	471	1.80009e-116	433.236	XM_062860327	PREDICTED: Aedes albopictus uncharacterized LOC115264863 (LOC115264863), mRNA
+OTU_671	No hit	25.0	1											
+OTU_834	No hit	25.0	1											
+OTU_847	No hit	25.0	1											
+OTU_852	No hit	25.0	1											
+OTU_13	Mosquito (Culicidae)	24.0	1	Aedes albopictus	7160	97.0	99.8		566	556	0	941.065	XM_062861297	PREDICTED: Aedes albopictus FERM, ARHGEF and pleckstrin domain-containing protein 2-like (LOC109431761), transcript variant X3, mRNA
+OTU_393	Mosquito (Culicidae)	24.0	1	Ochlerotatus camptorhynchus	644619	89.29	83.0		364	435	1.26739e-122	453.549	XM_065217032	PREDICTED: Ochlerotatus camptorhynchus multiple ankyrin repeats single KH domain (mask), transcript variant X16, mRNA
+OTU_680	No hit	24.0	1											
+OTU_741	No hit	24.0	1											
+OTU_80	Mosquito (Culicidae)	24.0	1	Aedes albopictus	7160	97.77	100.0		493	491	0	845.039	XM_029864198	PREDICTED: Aedes albopictus dual specificity tyrosine-phosphorylation-regulated kinase 2 (LOC109415851), transcript variant X2, mRNA
+OTU_827	Mosquito (Culicidae)	24.0	1	Aedes albopictus	7160	96.74	99.7		399	398	0	664.068	XM_062853543	PREDICTED: Aedes albopictus uncharacterized LOC109426759 (LOC109426759), mRNA
+OTU_116	Mosquito (Culicidae)	23.0	1	Aedes albopictus	7160	90.17	99.6		478	473	1.68485e-166	599.435	XM_062854966	PREDICTED: Aedes albopictus uncharacterized protein K02A2.6-like (LOC134288989), mRNA
+OTU_153	Mosquito (Culicidae)	23.0	1	Culex quinquefasciatus	7176	100.0	100.0		466	466	0	861.659	PV084812	Culex quinquefasciatus isolate S32_18SrRNA small subunit ribosomal RNA gene, partial sequence
+OTU_211	Mosquito (Culicidae)	23.0	1	Aedes albopictus	7160	91.24	98.2		468	455	4.45991e-172	617.901	XM_062860329	PREDICTED: Aedes albopictus uncharacterized LOC134291917 (LOC134291917), mRNA
+OTU_8	No hit	23.0	1											
+OTU_858	No hit	23.0	1											
+OTU_36	No hit	22.0	1											
+OTU_54	Mosquito (Culicidae)	22.0	1	Aedes albopictus	7160	98.15	96.6		487	504	0	850.579	XM_029880264	PREDICTED: Aedes albopictus E3 ubiquitin-protein ligase hyd (LOC109416290), transcript variant X7, mRNA
+OTU_749	No hit	22.0	1											
+OTU_775	Mosquito (Culicidae)	22.0	1	Aedes albopictus	7160	82.91	82.5		351	406	2.09595e-75	296.584	XM_062845872	PREDICTED: Aedes albopictus uncharacterized LOC134285311 (LOC134285311), transcript variant X1, mRNA
+OTU_238	No hit	21.0	1											
+OTU_702	No hit	21.0	1											
+OTU_717	No hit	21.0	1											
+OTU_73	No hit	21.0	1											
+OTU_836	No hit	21.0	1											
+OTU_855	Mosquito (Culicidae)	21.0	1	Aedes albopictus	7160	93.44	99.5		366	368	7.92489e-144	523.722	XM_062851781	PREDICTED: Aedes albopictus putative mediator of RNA polymerase II transcription subunit 12 (LOC109406183), transcript variant X2, mRNA
+OTU_92	Mosquito (Culicidae)	21.0	1	Aedes albopictus	7160	96.92	85.1		260	482	1.42674e-117	436.93	XM_019697565	PREDICTED: Aedes albopictus uncharacterized LOC109422703 (LOC109422703), mRNA
+OTU_24	Bacteria (>=97% identity)	21.0	1	Sphingomonas sp.	28214	99.25	96.5		400	545	0	721.314	LC500070	Sphingomonas sp. ZJ26 gene for 16S ribosomal RNA, partial sequence
+OTU_242	No hit	20.0	1											
+OTU_622	Mosquito (Culicidae)	20.0	1	Aedes albopictus	7160	99.2	29.6	yes	125	423	2.91725e-54	226.412	XM_062849835	PREDICTED: Aedes albopictus alpha-tocopherol transfer protein (LOC109423940), transcript variant X2, mRNA
+OTU_669	No hit	20.0	1											
+OTU_692	No hit	20.0	1											
+OTU_841	No hit	20.0	1											

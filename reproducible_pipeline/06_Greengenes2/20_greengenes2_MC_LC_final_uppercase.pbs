@@ -1,0 +1,170 @@
+#!/bin/bash
+# =============================================================================
+# Script 20 - 20_greengenes2_MC_LC_final_uppercase.pbs
+# LSM4288 FYP: mosquito midgut 16S rRNA (Nanopore, V3-V4)
+# Author  : Braden Tan (Tan Chin Qi Braden), NUS; Puniamoorthy lab
+# Step    : Greengenes2 classification
+# Purpose : Classifies LC and MC OTU centroids with classify-consensus-vsearch
+#           at >= 97% identity, query coverage 0.80, both strands.
+# Input   : otu97_centroids_UPPERCASE.fasta (LC and MC); GG2 V3-V4 reference +
+#           taxonomy
+# Output  : 06_taxonomy/greengenes2_MC_LC_final/
+# Run on  : Atlas9 PBS job (QIIME 2 2026.7)
+# Note    : Historical file/folder names swap LC and MC: '0p1pct' /
+#           'MC_0p1pct' = final LC (0.1%); 'LC_max0p5pct_20reads' = final MC
+#           (max(0.5%, 20 reads)).
+# Release : Header added for the code release (10 Oct 2026); comments only,
+#           code unchanged. Unedited original: original_code/.
+# =============================================================================
+
+#PBS -N GG2_MC_LC_UPPER
+#PBS -q serial
+#PBS -l select=1:ncpus=1:mem=4gb
+#PBS -j oe
+
+set -e
+set -o pipefail
+
+ROOT="/hpctmp/e0958567/Braden_16S_20260819"
+RUN="$ROOT/20_FINAL_reanalysis_20260903"
+
+module purge
+unset PYTHONPATH
+module load miniconda/4.12
+source "$(conda info --base)/etc/profile.d/conda.sh"
+
+conda activate /hpctmp/e0958567/conda_envs/rachis-qiime2-2026.7
+
+export LC_ALL=C
+export LANG=C
+
+# ------------------------------------------------------------
+# FINAL MC / LC OTU FASTAs
+# ------------------------------------------------------------
+
+MC_FASTA="$RUN/04_global_vsearch97/postracon_thresholds_576/vsearch97/0p1pct/otu97_centroids_UPPERCASE.fasta"
+
+LC_FASTA="$RUN/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/vsearch97/otu97_centroids_UPPERCASE.fasta"
+
+# ------------------------------------------------------------
+# Same Greengenes2 references used previously
+# ------------------------------------------------------------
+
+REFREADS="$ROOT/10_greengenes_test/reference/gg2_2022_10_338F_806R.qza"
+REFTAX="$ROOT/10_greengenes_test/reference/2022.10.backbone.tax.qza"
+
+OUTROOT="$RUN/06_taxonomy/greengenes2_MC_LC_final"
+
+MC_OUT="$OUTROOT/MC_0p1pct"
+LC_OUT="$OUTROOT/LC_max0p5pct_20reads"
+
+mkdir -p "$MC_OUT" "$LC_OUT"
+
+echo "===== FINAL GREENGENES2 MC / LC CLASSIFICATION ====="
+echo "Started: $(date)"
+echo
+
+qiime --version
+echo
+
+echo "MC FASTA OTUs: $(grep -c '^>' "$MC_FASTA")"
+echo "LC FASTA OTUs: $(grep -c '^>' "$LC_FASTA")"
+echo
+
+echo "Reference reads:"
+ls -lh "$REFREADS"
+
+echo "Reference taxonomy:"
+ls -lh "$REFTAX"
+
+echo
+
+# ============================================================
+# MC
+# ============================================================
+
+echo "===== MC: IMPORT ====="
+echo "MC definition: 0.1%"
+
+qiime tools import \
+    --type 'FeatureData[Sequence]' \
+    --input-path "$MC_FASTA" \
+    --output-path "$MC_OUT/query.qza"
+
+echo
+echo "===== MC: GREENGENES2 97% CLASSIFICATION ====="
+
+qiime feature-classifier classify-consensus-vsearch \
+    --i-query "$MC_OUT/query.qza" \
+    --i-reference-reads "$REFREADS" \
+    --i-reference-taxonomy "$REFTAX" \
+    --p-perc-identity 0.97 \
+    --p-query-cov 0.80 \
+    --p-strand both \
+    --p-threads 1 \
+    --o-classification "$MC_OUT/taxonomy.qza" \
+    --o-search-results "$MC_OUT/search_results.qza"
+
+mkdir -p \
+    "$MC_OUT/exported_taxonomy" \
+    "$MC_OUT/exported_search_results"
+
+qiime tools export \
+    --input-path "$MC_OUT/taxonomy.qza" \
+    --output-path "$MC_OUT/exported_taxonomy"
+
+qiime tools export \
+    --input-path "$MC_OUT/search_results.qza" \
+    --output-path "$MC_OUT/exported_search_results"
+
+echo
+echo "MC taxonomy:"
+wc -l "$MC_OUT/exported_taxonomy/taxonomy.tsv"
+
+echo
+
+# ============================================================
+# LC
+# ============================================================
+
+echo "===== LC: IMPORT ====="
+echo "LC definition: max(0.5%, 20 reads)"
+
+qiime tools import \
+    --type 'FeatureData[Sequence]' \
+    --input-path "$LC_FASTA" \
+    --output-path "$LC_OUT/query.qza"
+
+echo
+echo "===== LC: GREENGENES2 97% CLASSIFICATION ====="
+
+qiime feature-classifier classify-consensus-vsearch \
+    --i-query "$LC_OUT/query.qza" \
+    --i-reference-reads "$REFREADS" \
+    --i-reference-taxonomy "$REFTAX" \
+    --p-perc-identity 0.97 \
+    --p-query-cov 0.80 \
+    --p-strand both \
+    --p-threads 1 \
+    --o-classification "$LC_OUT/taxonomy.qza" \
+    --o-search-results "$LC_OUT/search_results.qza"
+
+mkdir -p \
+    "$LC_OUT/exported_taxonomy" \
+    "$LC_OUT/exported_search_results"
+
+qiime tools export \
+    --input-path "$LC_OUT/taxonomy.qza" \
+    --output-path "$LC_OUT/exported_taxonomy"
+
+qiime tools export \
+    --input-path "$LC_OUT/search_results.qza" \
+    --output-path "$LC_OUT/exported_search_results"
+
+echo
+echo "LC taxonomy:"
+wc -l "$LC_OUT/exported_taxonomy/taxonomy.tsv"
+
+echo
+echo "===== GREENGENES2 MC / LC COMPLETE ====="
+echo "Finished: $(date)"

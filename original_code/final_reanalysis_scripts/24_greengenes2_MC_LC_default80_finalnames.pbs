@@ -1,0 +1,108 @@
+#!/bin/bash
+
+#PBS -N GG2_MC_LC_80
+#PBS -q serial
+#PBS -l select=1:ncpus=1:mem=4gb
+#PBS -j oe
+
+set -e
+set -o pipefail
+
+ROOT="/hpctmp/e0958567/Braden_16S_20260819"
+RUN="$ROOT/20_FINAL_reanalysis_20260903"
+
+module purge
+unset PYTHONPATH
+module load miniconda/4.12
+source "$(conda info --base)/etc/profile.d/conda.sh"
+conda activate /hpctmp/e0958567/conda_envs/rachis-qiime2-2026.7
+
+export LC_ALL=C
+export LANG=C
+
+# FINAL corrected naming:
+# MC = max(0.5%, 20 reads), more conservative = 867 OTUs
+# LC = 0.1%, less conservative = 7642 OTUs
+
+MC_FASTA="$RUN/04_global_vsearch97/postracon_thresholds_576/LC_max0p5pct_20reads/vsearch97/otu97_centroids_UPPERCASE.fasta"
+LC_FASTA="$RUN/04_global_vsearch97/postracon_thresholds_576/vsearch97/0p1pct/otu97_centroids_UPPERCASE.fasta"
+
+REFREADS="$ROOT/10_greengenes_test/reference/gg2_2022_10_338F_806R.qza"
+REFTAX="$ROOT/10_greengenes_test/reference/2022.10.backbone.tax.qza"
+
+OUTROOT="$RUN/06_taxonomy/greengenes2_corrected_names"
+MC_OUT="$OUTROOT/MC_max0p5pct_20reads/default80"
+LC_OUT="$OUTROOT/LC_0p1pct/default80"
+
+mkdir -p "$MC_OUT" "$LC_OUT"
+
+echo "===== GREENGENES2 DEFAULT 80% CLASSIFICATION ====="
+echo "Started: $(date)"
+echo
+echo "FINAL NAMING:"
+echo "MC = max(0.5%, 20 reads)"
+echo "LC = 0.1%"
+echo
+echo "MC OTUs: $(grep -c '^>' "$MC_FASTA")"
+echo "LC OTUs: $(grep -c '^>' "$LC_FASTA")"
+
+# ---------------- MC ----------------
+echo
+echo "===== MC DEFAULT 80% ====="
+
+qiime tools import \
+    --type 'FeatureData[Sequence]' \
+    --input-path "$MC_FASTA" \
+    --output-path "$MC_OUT/query.qza"
+
+qiime feature-classifier classify-consensus-vsearch \
+    --i-query "$MC_OUT/query.qza" \
+    --i-reference-reads "$REFREADS" \
+    --i-reference-taxonomy "$REFTAX" \
+    --p-perc-identity 0.80 \
+    --p-query-cov 0.80 \
+    --p-strand both \
+    --p-threads 1 \
+    --o-classification "$MC_OUT/taxonomy.qza" \
+    --o-search-results "$MC_OUT/search_results.qza"
+
+mkdir -p "$MC_OUT/exported_taxonomy"
+
+qiime tools export \
+    --input-path "$MC_OUT/taxonomy.qza" \
+    --output-path "$MC_OUT/exported_taxonomy"
+
+# ---------------- LC ----------------
+echo
+echo "===== LC DEFAULT 80% ====="
+
+qiime tools import \
+    --type 'FeatureData[Sequence]' \
+    --input-path "$LC_FASTA" \
+    --output-path "$LC_OUT/query.qza"
+
+qiime feature-classifier classify-consensus-vsearch \
+    --i-query "$LC_OUT/query.qza" \
+    --i-reference-reads "$REFREADS" \
+    --i-reference-taxonomy "$REFTAX" \
+    --p-perc-identity 0.80 \
+    --p-query-cov 0.80 \
+    --p-strand both \
+    --p-threads 1 \
+    --o-classification "$LC_OUT/taxonomy.qza" \
+    --o-search-results "$LC_OUT/search_results.qza"
+
+mkdir -p "$LC_OUT/exported_taxonomy"
+
+qiime tools export \
+    --input-path "$LC_OUT/taxonomy.qza" \
+    --output-path "$LC_OUT/exported_taxonomy"
+
+echo
+echo "===== COMPLETE ====="
+echo "MC taxonomy lines:"
+wc -l "$MC_OUT/exported_taxonomy/taxonomy.tsv"
+echo "LC taxonomy lines:"
+wc -l "$LC_OUT/exported_taxonomy/taxonomy.tsv"
+echo
+echo "Finished: $(date)"
