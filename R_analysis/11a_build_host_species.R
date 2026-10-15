@@ -5,6 +5,7 @@
 # COI identifications (one per specimen):
 #   Agabus plate 1 : CO1_P1_Gbif-Results.xlsx (or .csv)  - GBIF/BOLD BLAST
 #   Agabus plate 2 : CO1_P2_Gbif-Results.xlsx (or .csv)  - OPTIONAL, used if present
+#                    otherwise TYTMZ2_COI_morpho_id.xlsx  - MORPHOLOGICAL IDs (Oct 2026)
 #   Zi Xin         : ZiXin_Taxa_classified_COI.xlsx, Sheet1 (Sheet2 is a subset)
 # 16S sample <-> specimen: demux_metadata_audit.csv (from Atlas9 01_demux_metadata/)
 #
@@ -17,8 +18,9 @@
 #   data/raw/metadata/demux_metadata_audit.csv
 # Output:
 #   data/raw/species/wild_host_species_COI.tsv   (one row per wild 16S sample)
-# When Aggy's plate 2 file arrives: save it as data/raw/species/CO1_P2_Gbif-Results.xlsx
-# and re-run this script.
+# Plate 2: Aggy's morpho sheet data/raw/species/TYTMZ2_COI_morpho_id.xlsx is used
+# (columns Specimen_code_number, Specimen_morpho_ID). If a GBIF/BLAST file for
+# plate 2 (CO1_P2_Gbif-Results) is added later, it takes precedence.
 # =============================================================================
 
 source(here::here("R", "00_setup.R"))
@@ -37,7 +39,9 @@ read_any <- function(f) if (grepl("\\.csv$", f)) read_csv(f, show_col_types = FA
 norm <- function(x) gsub("[^A-Z0-9]", "", toupper(as.character(x)))
 
 f_ag1 <- find_file("CO1_P1_Gbif-Results")
-f_ag2 <- find_file("CO1_P2_Gbif-Results")          # NA until Aggy sends it
+f_ag2 <- find_file("CO1_P2_Gbif-Results")          # GBIF/BLAST version (not available yet)
+f_ag2m <- file.path(sp_dir, "TYTMZ2_COI_morpho_id.xlsx")   # morphological IDs
+if (!file.exists(f_ag2m)) f_ag2m <- NA_character_
 f_zx  <- file.path(sp_dir, "ZiXin_Taxa_classified_COI.xlsx")
 stopifnot("demux_metadata_audit.csv not found in data/raw/metadata/" = file.exists(f_audit),
           "CO1_P1_Gbif-Results not found in data/raw/species/"       = !is.na(f_ag1),
@@ -62,6 +66,35 @@ read_gbif <- function(f, label) {
          COI_support  = sprintf("%.2f%% identity", as.numeric(d$identity)),
          Genus_raw    = last_n(d$classification, 1))
 }
+# Aggy plate 2 morpho sheet: abbreviated names ("Ae. albopictus", "Ma. uniformis")
+# and long specimen codes that the 16S plate writes in short form:
+#   240926MZFF_97 -> 0926FF_97   (Mandai: drop year and "MZ")
+#   250122MT1_1   -> 0122MT1_1   (MT: drop year)
+#   230907KM1_9   -> 07KM1_09    (Kranji: day only, number zero-padded)
+to_16s_name <- function(code) {
+  code <- str_trim(as.character(code))
+  m <- str_match(code, "^(\\d{2})(\\d{2})(\\d{2})(?:MZ)?([A-Z]+\\d*)_(\\d+)$")
+  out <- if_else(str_starts(m[, 5], "KM"),
+                 sprintf("%s%s_%02d", m[, 4], m[, 5], as.integer(m[, 6])),
+                 sprintf("%s%s%s_%s", m[, 3], m[, 4], m[, 5], m[, 6]))
+  if_else(is.na(m[, 1]), code, out)
+}
+read_morpho <- function(f, label) {
+  d  <- read_excel(f)
+  id <- str_squish(as.character(d$Specimen_morpho_ID))
+  genus_map <- c("Ae." = "Aedes", "Ma." = "Mansonia", "Cx." = "Culex",
+                 "An." = "Anopheles", "Ar." = "Armigeres", "Ur." = "Uranotaenia")
+  ab    <- str_extract(id, "^[A-Z][a-z]+\\.")
+  genus <- coalesce(unname(genus_map[ab]), word(id, 1))
+  full  <- if_else(!is.na(ab), paste(genus, word(id, 2)), id)   # "Ae. albopictus" -> "Aedes albopictus"
+  tibble(key          = norm(to_16s_name(d$Specimen_code_number)),
+         COI_source   = label,
+         COI_call_raw = full,
+         COI_rank     = "MORPHOLOGY",
+         COI_support  = "",
+         Genus_raw    = genus)
+}
+
 zx <- read_excel(f_zx, sheet = "Sheet1")
 zx_tab <- tibble(key          = norm(zx$SpecimenID),
                  COI_source   = "Zi Xin (tree placement)",
@@ -72,7 +105,8 @@ zx_tab <- tibble(key          = norm(zx$SpecimenID),
                  Genus_raw    = as.character(zx$Genus))
 
 coi <- bind_rows(read_gbif(f_ag1, "Agabus P1 (GBIF/BOLD BLAST)"),
-                 if (!is.na(f_ag2)) read_gbif(f_ag2, "Agabus P2 (GBIF/BOLD BLAST)"),
+                 if (!is.na(f_ag2)) read_gbif(f_ag2, "Agabus P2 (GBIF/BOLD BLAST)")
+                 else if (!is.na(f_ag2m)) read_morpho(f_ag2m, "Agabus P2 (morphological ID)"),
                  zx_tab)
 stopifnot("a specimen appears in more than one COI file" = !anyDuplicated(coi$key))
 
@@ -80,7 +114,7 @@ stopifnot("a specimen appears in more than one COI file" = !anyDuplicated(coi$ke
 host <- wild |>
   left_join(coi, by = "key") |>
   mutate(Host_group = case_when(
-    Plate == "AG_P02" & is.na(COI_call_raw)                  ~ "Pending (AG_P02 COI not yet available)",
+    Plate == "AG_P02" & is.na(COI_call_raw) & is.na(f_ag2) & is.na(f_ag2m) ~ "Pending (AG_P02 COI not yet available)",
     is.na(COI_call_raw)                                      ~ "Unidentified",
     COI_call_raw == "Aedes albopictus"                       ~ "Ae. albopictus",
     COI_call_raw == "Aedes aegypti"                          ~ "Ae. aegypti",
@@ -104,7 +138,14 @@ cat("\nCulex detail:\n")
 print(count(filter(host, Host_group == "Culex spp."), COI_call_raw, sort = TRUE))
 unmatched <- setdiff(coi$key, wild$key)
 cat("\nCOI records with no wild 16S sample (other projects / not sequenced):", length(unmatched), "\n")
-if (is.na(f_ag2)) {
+if (!is.na(f_ag2m) || !is.na(f_ag2)) {
+  p2 <- filter(host, Plate == "AG_P02")
+  cat("\nAG_P02: ", sum(!is.na(p2$COI_call_raw)), " of ", nrow(p2),
+      " wild 16S samples matched a plate-2 ID\n", sep = "")
+  miss <- filter(p2, is.na(COI_call_raw))
+  if (nrow(miss)) { cat("AG_P02 samples with NO plate-2 ID (check specimen names):\n"); print(select(miss, Sample_ID, Specimen), n = Inf) }
+}
+if (is.na(f_ag2) && is.na(f_ag2m)) {
   expected <- c("Ae. albopictus" = 219, "Mansonia indiana" = 36, "Culex spp." = 23,
                 "Pending (AG_P02 COI not yet available)" = 95, "Unidentified" = 4)
   got <- table(host$Host_group)[names(expected)]
