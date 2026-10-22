@@ -18,7 +18,7 @@
 #   Kruskal-Wallis + pairwise Wilcoxon; PERMANOVA (depth) + PERMDISP + pairwise;
 #   PERMANOVA with collection site as an extra covariate (site-adjusted);
 #   Kranji Marshes only: Ae. albopictus vs Mansonia indiana (site held constant).
-#   Lab mosquitoes appear in the Fig. 7 heatmap/PCoA as a grey reference only.
+#   Fig. 7 shows wild mosquitoes only (no lab reference).
 #
 # Outputs
 #   output/figures/Fig6_origin_x_species.pdf/.png
@@ -35,8 +35,12 @@ host_file <- file.path(paths$species, "wild_host_species_COI.tsv")
 stopifnot("Run 11a_build_host_species.R first" = file.exists(host_file))
 
 fmt_p <- function(p) ifelse(p < 0.001, "p < 0.001", paste0("p = ", formatC(p, digits = 2, format = "g")))
+fmt_bracket <- function(p) case_when(p < 0.001 ~ "p < 0.001",
+                                     p < 0.01  ~ sprintf("p = %.3f", p),
+                                     p < 0.05  ~ sprintf("p = %.2f", p),
+                                     TRUE      ~ "n.s.")
 sp_levels  <- c("Ae. albopictus", "Mansonia indiana", "Culex spp.")
-sp_short   <- c("Ae. albopictus" = "Ae. alb.", "Mansonia indiana" = "Mansonia", "Culex spp." = "Culex")
+sp_short   <- c("Ae. albopictus" = "Ae. alb.", "Mansonia indiana" = "M. indiana", "Culex spp." = "Culex")
 sp_colours <- c("Ae. albopictus" = "#4a3aa7", "Mansonia indiana" = "#008300", "Culex spp." = "#eb6834")
 
 # ---- 1. Load + per-sample metrics -------------------------------------------
@@ -160,12 +164,40 @@ p6_heat <- genus_heatmap(A_heat_tab, x_labels = function(b) A_lab[b],
 A_long <- A |> select(Sample_ID, Group, Species, all_of(alpha_metrics)) |>
   pivot_longer(all_of(alpha_metrics), names_to = "metric", values_to = "value") |>
   filter(!is.na(value)) |> mutate(metric = factor(alpha_names[metric], levels = alpha_names))
+
+# p-value brackets: pairwise Wilcoxon, BH over the 4 pairs within each metric (= Table S8B)
+# Level 1: wild vs lab within each species (side by side); levels 2-3: species within origin
+x_pos      <- setNames(seq_along(A_levels), A_levels)
+pair_level <- c("Wild Ae. albopictus|Lab Ae. albopictus" = 1,
+                "Wild Culex spp.|Lab Culex spp."         = 1,
+                "Wild Ae. albopictus|Wild Culex spp."    = 2,
+                "Lab Ae. albopictus|Lab Culex spp."      = 3)
+y_rng <- A_long |> group_by(metric) |>
+  summarise(ymax = max(value), span = diff(range(value)), .groups = "drop")
+A_brackets <- A_alpha |>
+  mutate(metric = factor(alpha_names[metric], levels = alpha_names),
+         x1 = x_pos[group1], x2 = x_pos[group2],
+         level = pair_level[paste(group1, group2, sep = "|")],
+         label = fmt_bracket(p_BH)) |>
+  left_join(y_rng, by = "metric") |>
+  mutate(y = ymax + span * (0.07 + 0.14 * (level - 1)), tick = span * 0.025)
+stopifnot(nrow(A_brackets) == 12, !anyNA(A_brackets$level))
+
 p6_alpha <- ggplot(A_long, aes(x = Group, y = value)) +
   geom_jitter(aes(colour = Species), width = 0.2, height = 0, size = 0.6, alpha = 0.4) +
   geom_boxplot(fill = NA, outlier.shape = NA, width = 0.55, linewidth = 0.4) +
+  geom_segment(data = A_brackets, aes(x = x1, xend = x2, y = y, yend = y),
+               inherit.aes = FALSE, linewidth = 0.3) +
+  geom_segment(data = A_brackets, aes(x = x1, xend = x1, y = y, yend = y - tick),
+               inherit.aes = FALSE, linewidth = 0.3) +
+  geom_segment(data = A_brackets, aes(x = x2, xend = x2, y = y, yend = y - tick),
+               inherit.aes = FALSE, linewidth = 0.3) +
+  geom_text(data = A_brackets, aes(x = (x1 + x2) / 2, y = y, label = label),
+            inherit.aes = FALSE, vjust = -0.35, size = 2.1) +
   facet_wrap(~ metric, scales = "free_y") +
   scale_colour_manual(values = sp_colours, guide = "none") +
   scale_x_discrete(labels = function(b) A_lab_box[b]) +
+  scale_y_continuous(expand = expansion(mult = c(0.05, 0.10))) +
   labs(x = NULL, y = NULL) +
   theme(strip.text = element_text(size = 8.5, lineheight = 0.9), strip.clip = "off",
         axis.text.x = element_text(size = 7))
@@ -194,7 +226,7 @@ p6_pcoa <- ggplot(A_pc, aes(x = PCo1, y = PCo2, colour = Species)) +
         legend.text = element_text(size = 8)) +
   coord_fixed()
 
-fig6 <- (free(p6_heat) | (p6_alpha / p6_pcoa + plot_layout(heights = c(1, 1.3)))) +
+fig6 <- (free(p6_heat) | (p6_alpha / p6_pcoa + plot_layout(heights = c(1.2, 1.3)))) +
   plot_layout(widths = c(1.3, 2.5)) + plot_annotation(tag_levels = "A")
 save_fig(fig6, "Fig6_origin_x_species", width = 215, height = 250)
 if (isTRUE(capabilities("cairo")))
@@ -250,17 +282,12 @@ save_table(bind_rows(tidy_adonis(pB, "depth + Species, marginal"),
 save_table(B_beta, "11B_pairwise_beta", paths$stats)
 save_table(B_core |> filter(prevalence >= 50), "11B_core_prevalence", paths$stats)
 
-# ---- Fig. 7 (stats wild only; lab = grey reference) -------------------------
-lab_ids <- sd$Sample_ID[sd$Origin == "Lab"]
-C7 <- bind_rows(B |> mutate(Group = as.character(Species)),
-                sd |> filter(Origin == "Lab") |> mutate(Group = "Lab")) |>
-  mutate(Group = factor(Group, levels = c(sp_levels, "Lab")))
-B_lab <- setNames(as.expression(c(
-  lapply(sp_levels, function(s) bquote(atop(italic(.(sp_short[[s]])), "(" * .(as.integer(B_n[[s]])) * ")"))),
-  list(bquote(atop("Lab", "(" * .(length(lab_ids)) * ")"))))), c(sp_levels, "Lab"))
-B_heat_tab <- genus_mean_table(bio[C7$Sample_ID, ], C7$Group,
-                               facet = factor(if_else(C7$Group == "Lab", "Ref.", "Wild species"),
-                                              levels = c("Wild species", "Ref.")))
+# ---- Fig. 7 (wild species only; no lab reference, per Priya) ----------------
+B_lab <- setNames(as.expression(
+  lapply(sp_levels, function(s) bquote(atop(italic(.(sp_short[[s]])), "(" * .(as.integer(B_n[[s]])) * ")")))),
+  sp_levels)
+# Heatmap: wild species only (lab reference removed from panel A, per Priya)
+B_heat_tab <- genus_mean_table(bio[B$Sample_ID, ], B$Species)
 save_table(B_heat_tab, "11B_all_genera_by_wild_species", paths$stats)
 p7_heat <- genus_heatmap(B_heat_tab, x_labels = function(b) B_lab[b],
                          breaks = c(1e-3, 0.1, 10), legend_width = 30)
@@ -269,36 +296,57 @@ B_long <- B |> select(Sample_ID, Species, all_of(alpha_metrics)) |>
   pivot_longer(all_of(alpha_metrics), names_to = "metric", values_to = "value") |>
   filter(!is.na(value)) |> mutate(metric = factor(alpha_names[metric], levels = alpha_names))
 B_strip <- setNames(paste0(alpha_names[B_kw$metric], "\nK-W ", fmt_p(B_kw$p_BH)), alpha_names[B_kw$metric])
+# Pairwise brackets (Wilcoxon, BH over the 3 pairs within metric), shown only
+# for metrics with a significant Kruskal-Wallis test
+x7   <- setNames(seq_along(sp_levels), sp_levels)
+lvl7 <- c("Ae. albopictus|Mansonia indiana" = 1, "Mansonia indiana|Culex spp." = 1,
+          "Ae. albopictus|Culex spp." = 2)
+sig7 <- B_kw$metric[B_kw$p_BH < 0.05]
+y7   <- B_long |> group_by(metric) |>
+  summarise(ymax = max(value), span = diff(range(value)), .groups = "drop")
+B_brackets <- B_alpha |>
+  filter(metric %in% sig7) |>
+  mutate(metric = factor(alpha_names[metric], levels = alpha_names),
+         x1 = x7[group1] + 0.05, x2 = x7[group2] - 0.05,   # small gap where brackets meet
+         level = lvl7[paste(group1, group2, sep = "|")],
+         label = fmt_bracket(p_BH)) |>
+  left_join(y7, by = "metric") |>
+  mutate(y = ymax + span * (0.07 + 0.14 * (level - 1)), tick = span * 0.025)
+stopifnot(!anyNA(B_brackets$level))
+
 p7_alpha <- ggplot(B_long, aes(x = Species, y = value)) +
   geom_jitter(aes(colour = Species), width = 0.2, height = 0, size = 0.6, alpha = 0.4) +
   geom_boxplot(fill = NA, outlier.shape = NA, width = 0.55, linewidth = 0.4) +
+  geom_segment(data = B_brackets, aes(x = x1, xend = x2, y = y, yend = y),
+               inherit.aes = FALSE, linewidth = 0.3) +
+  geom_segment(data = B_brackets, aes(x = x1, xend = x1, y = y, yend = y - tick),
+               inherit.aes = FALSE, linewidth = 0.3) +
+  geom_segment(data = B_brackets, aes(x = x2, xend = x2, y = y, yend = y - tick),
+               inherit.aes = FALSE, linewidth = 0.3) +
+  geom_text(data = B_brackets, aes(x = (x1 + x2) / 2, y = y, label = label),
+            inherit.aes = FALSE, vjust = -0.35, size = 2.1) +
   facet_wrap(~ metric, scales = "free_y", labeller = as_labeller(B_strip)) +
   scale_colour_manual(values = sp_colours, guide = "none") +
   scale_x_discrete(labels = sp_short) +
+  scale_y_continuous(expand = expansion(mult = c(0.05, 0.10))) +
   labs(x = NULL, y = NULL) +
   theme(strip.text = element_text(size = 8.5, lineheight = 0.9), strip.clip = "off",
         axis.text.x = element_text(face = "italic", size = 8, angle = 45, hjust = 1))
 
-d7  <- jac(C7$Sample_ID)
-pc7 <- cmdscale(d7, k = 2, eig = TRUE)
+# PCoA on the wild species only (same distance matrix as the PERMANOVA)
+pc7 <- cmdscale(dB, k = 2, eig = TRUE)
 ve7 <- 100 * pc7$eig[1:2] / sum(pc7$eig[pc7$eig > 0])
-pc7_df <- C7 |> mutate(PCo1 = pc7$points[Sample_ID, 1], PCo2 = pc7$points[Sample_ID, 2])
-leg7 <- as.expression(c(
-  lapply(sp_levels, function(s) {
-    if (s == "Culex spp.") bquote(italic("Culex") ~ "spp. (n =" ~ .(as.integer(B_n[[s]])) * ")")
-    else bquote(italic(.(s)) ~ "(n =" ~ .(as.integer(B_n[[s]])) * ")")
-  }),
-  list(bquote("Lab, reference (n =" ~ .(length(lab_ids)) * ")"))))
-brk7 <- c(sp_levels, "Lab")
-p7_pcoa <- ggplot(mapping = aes(x = PCo1, y = PCo2, colour = Group, shape = Group)) +
-  geom_point(data = filter(pc7_df, Group == "Lab"), size = 1, alpha = 0.35) +
-  geom_point(data = filter(pc7_df, Group != "Lab"), size = 1.3, alpha = 0.7) +
-  stat_ellipse(data = filter(pc7_df, Group != "Lab"), aes(shape = NULL),
-               type = "t", level = 0.95, linewidth = 0.8) +
-  scale_colour_manual(values = c(sp_colours, Lab = "#9b9a95"), breaks = brk7, labels = leg7, name = NULL) +
-  scale_shape_manual(values = c("Ae. albopictus" = 16, "Mansonia indiana" = 17, "Culex spp." = 15, Lab = 1),
-                     breaks = brk7, labels = leg7, name = NULL) +
-  guides(colour = guide_legend(nrow = 2, byrow = TRUE), shape = guide_legend(nrow = 2, byrow = TRUE)) +
+pc7_df <- B |> mutate(PCo1 = pc7$points[Sample_ID, 1], PCo2 = pc7$points[Sample_ID, 2])
+leg7 <- as.expression(lapply(sp_levels, function(s) {
+  if (s == "Culex spp.") bquote(italic("Culex") ~ "spp. (n =" ~ .(as.integer(B_n[[s]])) * ")")
+  else bquote(italic(.(s)) ~ "(n =" ~ .(as.integer(B_n[[s]])) * ")")
+}))
+p7_pcoa <- ggplot(pc7_df, aes(x = PCo1, y = PCo2, colour = Species, shape = Species)) +
+  geom_point(size = 1.3, alpha = 0.7) +
+  stat_ellipse(aes(shape = NULL), type = "t", level = 0.95, linewidth = 0.8) +
+  scale_colour_manual(values = sp_colours, breaks = sp_levels, labels = leg7, name = NULL) +
+  scale_shape_manual(values = c("Ae. albopictus" = 16, "Mansonia indiana" = 17, "Culex spp." = 15),
+                     breaks = sp_levels, labels = leg7, name = NULL) +
   labs(x = sprintf("PCoA 1 (%.1f%%)", ve7[1]), y = sprintf("PCoA 2 (%.1f%%)", ve7[2]),
        subtitle = sprintf("Jaccard | Wild species only\nPERMANOVA (depth-adjusted): R² = %.3f, F = %.1f, %s | PERMDISP: %s",
                           pB["Species", "R2"], pB["Species", "F"], fmt_p(pB["Species", "Pr(>F)"]),
@@ -307,7 +355,7 @@ p7_pcoa <- ggplot(mapping = aes(x = PCo1, y = PCo2, colour = Group, shape = Grou
         legend.text = element_text(size = 8)) +
   coord_fixed()
 
-fig7 <- (free(p7_heat) | (p7_alpha / p7_pcoa + plot_layout(heights = c(1, 1.3)))) +
+fig7 <- (free(p7_heat) | (p7_alpha / p7_pcoa + plot_layout(heights = c(1.2, 1.3)))) +
   plot_layout(widths = c(1.5, 2.3)) + plot_annotation(tag_levels = "A")
 save_fig(fig7, "Fig7_wild_host_species", width = 225, height = 250)
 if (isTRUE(capabilities("cairo")))
@@ -363,7 +411,7 @@ summary_lines <- c(
   sprintf("  (site-adjusted model uses %d location-assigned wild mosquitoes)", nrow(BL)),
   "Pairwise PERMANOVA (depth-adjusted; BH over 3 pairs)", beta_lines(B_beta),
   "Core genera (>= 90%)", core_lines(B_core),
-  "Top genera (mean relative abundance)", top_genera(B_heat_tab |> filter(Group != "Lab")),
+  "Top genera (mean relative abundance)", top_genera(B_heat_tab),
   "",
   "=== KRANJI MARSHES ONLY: Ae. albopictus vs Mansonia indiana ===",
   if (km_ok) c(sprintf("  n: %s", paste(sprintf("%s %d", levels(KM$Species), as.integer(table(KM$Species))), collapse = ", ")),

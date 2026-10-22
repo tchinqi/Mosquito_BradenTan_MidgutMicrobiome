@@ -2,7 +2,7 @@
 # 07_core_microbiome.R - Figure 3: core midgut bacteria across origin, wild
 #                        collection sites and laboratory species
 #
-# Definition (Methods 2.11):
+# Definition (Methods 2.6):
 #   - present   = >= 1 read assigned to the genus in a mosquito. Under the MC
 #                 workflow every retained consensus has >= 20 reads, so
 #                 "present" means >= 20 reads.

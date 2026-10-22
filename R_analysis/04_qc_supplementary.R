@@ -6,7 +6,7 @@
 #   B. Negative controls: genus composition of the 6 H12 controls next to the
 #      mean Wild and Lab profiles, with read counts
 #   C. Depth vs richness: classified reads vs observed OTUs (no-rarefaction
-#      justification, Methods 2.11)
+#      justification, Methods 2.6)
 #
 # Outputs
 #   output/figures/FigS_wolbachia.pdf/.png

@@ -1,12 +1,13 @@
 # =============================================================================
-# 02_locations.R - Report Figure 4: Wild mosquitoes across collection locations
+# 02_locations.R - Figure 5: Wild mosquitoes across collection locations
 #
 # Statistics: the 345 Wild samples with confirmed locations ONLY
 #   Mandai Zoo (MZ) 194, Kranji Marshes (KM) 88, Bird Paradise (BP) 39,
 #   River Safari (RS) 24. The 35 unmapped Wild samples are excluded.
-# Lab (n = 190) is drawn in grey on the composition plot and PCoA as a
-# visual reference only - it never enters a test.
-# No rarefaction. Wild host species are analysed in 11_host_species.R.
+# Report Figure 4 shows the four wild sites only (lab reference removed from
+# the heatmap and PCoA, per Priya, Oct 2026). Lab is kept only in the
+# supplementary top-8 bar plot. It never enters a test.
+# No rarefaction. Wild host species not used here (pending).
 #
 # Outputs
 #   output/figures/Fig5_locations.pdf/.png
@@ -102,11 +103,9 @@ p_comp <- ggplot(comp_mean, aes(x = Group, y = mean_rel, fill = Genus_plot)) +
   theme(legend.key.size = unit(3.5, "mm"), legend.text = element_text(size = 8),
         axis.text.x = element_text(size = 8))
 
-# Panel A = every genus as a heatmap (sites + Lab reference column). The top-8
-# stacked bar is kept as a supplementary/slide figure.
-heat_tab <- genus_mean_table(comb, sd_c$Group,
-                             facet = factor(if_else(sd_c$Group == "Lab", "Ref.", "Wild sites"),
-                                            levels = c("Wild sites", "Ref.")))
+# Panel A = every genus as a heatmap, wild sites only (no lab reference).
+# The top-8 stacked bar is kept as a supplementary/slide figure.
+heat_tab <- genus_mean_table(wild, sd_w$Location)
 save_table(heat_tab, "02_all_genera_by_location", paths$stats)
 p_heat <- genus_heatmap(heat_tab, x_labels = site_abbr,
                         breaks = c(1e-3, 0.1, 10), legend_width = 30)
@@ -237,23 +236,23 @@ pcoa_plot <- function(df, ve, show_lab = TRUE, subtitle = NULL) {
     guides(colour = guide_legend(nrow = 2, byrow = TRUE), shape = guide_legend(nrow = 2, byrow = TRUE)) +
     theme(plot.subtitle = element_text(size = 8), legend.position = "bottom",
           legend.text = element_text(size = 8)) +
-      coord_fixed()   # equal axis scaling: distances on the plot match Jaccard distances
+    coord_fixed()   # equal axis scaling: distances on the plot match Jaccard distances
 }
 
 stats_subtitle <- sprintf(
   "Jaccard | Wild sites only\nPERMANOVA (controlling for depth): R² = %.3f, F = %.1f, %s | PERMDISP: %s",
   R2_l, F_l, fmt_p(p_l), fmt_p(p_dl))
 
-p_pcoa <- pcoa_plot(pcoa_c, ve_c, show_lab = TRUE, subtitle = stats_subtitle)
-
-# Supplementary: Wild-only ordination (the space the statistics were run in)
+# Wild-only ordination (the same space the statistics were run in)
 pc_w   <- cmdscale(d_w, k = 2, eig = TRUE)
 ve_w   <- 100 * pc_w$eig[1:2] / sum(pc_w$eig[pc_w$eig > 0])
 pcoa_w <- sd_w |>
-  mutate(Group = factor(as.character(Location), levels = group_levels),
+  mutate(Group = factor(as.character(Location), levels = site_levels),
          PCo1 = pc_w$points[Sample_ID, 1], PCo2 = pc_w$points[Sample_ID, 2])
-p_pcoa_w <- pcoa_plot(pcoa_w, ve_w, show_lab = FALSE, subtitle = stats_subtitle)
-save_fig(p_pcoa_w, "FigS_locations_wild_only_pcoa", width = 180, height = 120)
+
+# Fig. 4C: wild sites only (lab reference removed)
+p_pcoa <- pcoa_plot(pcoa_w, ve_w, show_lab = FALSE, subtitle = stats_subtitle)
+save_fig(p_pcoa, "FigS_locations_wild_only_pcoa", width = 180, height = 120)
 
 # ---- 6. Assemble Figure 5 ---------------------------------------------------
 fig5 <- (free(p_heat) | (p_alpha / p_pcoa + plot_layout(heights = c(1, 1.25)))) +

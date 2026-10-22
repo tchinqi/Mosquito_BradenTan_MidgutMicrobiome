@@ -35,7 +35,7 @@ stopifnot(ncol(gen_counts) == 68, all(abs(rowSums(gen_rel) - 1) < 1e-9))
 
 # ---- 2. Filter: present in >= 10% of samples --------------------------------
 prev_all <- colMeans(gen_counts > 0)
-# "Unclassified_at_genus" is not a genus, so it is excluded from testing (Methods 2.11)
+# "Unclassified_at_genus" is not a genus, so it is excluded from testing (Methods 2.6)
 tested   <- setdiff(names(prev_all)[prev_all >= 0.10], "Unclassified_at_genus")
 message(length(tested), " genera present in >= 10% of samples are tested.")
 

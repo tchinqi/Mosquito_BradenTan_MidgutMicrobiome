@@ -141,7 +141,8 @@ p_pie <- ggplot(pie_long, aes(x = 1, y = pct, fill = rank)) +
         legend.text  = element_text(size = 8))
 
 # ---- 3. Assemble ------------------------------------------------------------
-top <- (p_80 | p_97) + plot_layout(guides = "collect") &
+top <- (p_80 | plot_spacer() | p_97) +                 # spacer = gap between A and B
+  plot_layout(widths = c(1, 0.12, 1), guides = "collect") &
   theme(legend.position = "top")
 fig1 <- top / p_pie + plot_layout(heights = c(1, 1.15))
 fig1 <- fig1 + plot_annotation(tag_levels = "A") &
