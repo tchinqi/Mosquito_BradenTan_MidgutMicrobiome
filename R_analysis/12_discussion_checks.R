@@ -130,7 +130,23 @@ p_wol <- ggplot(W_long, aes(Group, pct)) +
   labs(x = NULL, y = expression(italic(Wolbachia)~"(%)"),
        subtitle = sprintf("Excluding Elizabethkingia: Kruskal-Wallis %s", fmt_p(kw1$p.value))) +
   theme_fyp() + theme(plot.subtitle = element_text(size = 8))
-save_fig(p_wol, "FigS_wolbachia_excl_elizabethkingia", width = 170, height = 95)
+
+# Panel C: log10 ratio of Wolbachia to Stenotrophomonas A (pseudocount of 1 read)
+p_ratio <- W |>
+  mutate(panel = "C   Ratio to Stenotrophomonas A") |>
+  ggplot(aes(Group, log_wol_steno)) +
+  geom_hline(yintercept = 0, linetype = "dashed", colour = "grey60") +
+  geom_boxplot(outlier.shape = NA, width = 0.55, fill = "#f3f2ee") +
+  geom_jitter(width = 0.18, height = 0, size = 0.6, alpha = 0.35, colour = "#eb6834") +
+  facet_wrap(~ panel) +
+  scale_x_discrete(labels = grp_lab) +
+  labs(x = NULL,
+       y = expression(log[10]~"("*italic(Wolbachia)*" / "*italic(Stenotrophomonas)~"A)"),
+       subtitle = sprintf("Kruskal-Wallis %s", fmt_p(kw2$p.value))) +
+  theme_fyp() + theme(plot.subtitle = element_text(size = 8))
+
+fig_wol <- (p_wol | p_ratio) + plot_layout(widths = c(2, 1))
+save_fig(fig_wol, "FigS_wolbachia_excl_elizabethkingia", width = 240, height = 95)
 
 # =============================================================================
 # 2. RICHNESS ADJUSTED FOR SEQUENCING DEPTH

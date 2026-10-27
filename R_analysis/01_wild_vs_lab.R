@@ -2,7 +2,7 @@
 # 01_wild_vs_lab.R - Figure 2: Wild vs Lab midgut bacterial communities
 #
 # Data: 570 biological samples (380 Wild, 190 Lab) x 328 MC + GG2 >=97% OTUs
-# No rarefaction (see Methods 2.6). Wild host species not used here.
+# No rarefaction (see Methods 2.11). Wild host species not used here.
 #
 # Outputs
 #   output/figures/Fig2_wild_vs_lab.pdf/.png
